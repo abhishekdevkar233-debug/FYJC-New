@@ -1,11 +1,20 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField } from "../../components/ui/TextField";
 import { SelectField } from "../../components/ui/SelectField";
 import { ChoiceCard } from "../../components/ui/ChoiceCard";
 import { Button } from "../../components/ui/Button";
 import { Toast } from "../../components/ui/Toast";
-import { APPLICATION_DRAFT_KEY, APPLICATION_STEPS } from "../../lib/applicationDraft";
+import { APPLICATION_STEPS, PAYMENT_AMOUNT } from "../../lib/applicationDraft";
+import { useApplicationForm } from "../../context/ApplicationFormContext";
+import type {
+  RegistrationData,
+  PersonalData,
+  CategoryData,
+  SubjectMark,
+  DocumentRow,
+  PaymentData,
+} from "../../context/ApplicationFormContext";
 import "./ApplicationFormPage.css";
 
 const STEPS = APPLICATION_STEPS;
@@ -22,59 +31,6 @@ const STEP_TAB_LABELS = [
   "Lock Application",
 ];
 
-interface RegistrationData {
-  schoolArea: "Within Maharashtra State" | "Outside Maharashtra State";
-  status: "Fresher" | "Repeater" | "Previously Passed";
-  board: string;
-  seatNumber: string;
-  month: string;
-  year: string;
-  name: string;
-}
-
-interface PersonalData {
-  fullName: string;
-  motherName: string;
-  gender: string;
-  dob: string;
-  schoolName: string;
-  udise: string;
-  indexNumber: string;
-  residence: string;
-  address: string;
-  pin: string;
-  state: string;
-  district: string;
-  area: string;
-  city: string;
-  mobile1: string;
-  mobile2: string;
-  landline: string;
-  email: string;
-}
-
-interface CategoryData {
-  originalCategory: string;
-  admissionCategory: string;
-  minority: "Belongs to Minority Category" | "Does Not Belong";
-  linguisticMinority: string;
-  religiousMinority: string;
-  inhouse: "Yes, apply through Inhouse Quota" | "No";
-}
-
-interface SubjectMark {
-  subject: string;
-  name: string;
-  marks: string;
-  outOf: string;
-}
-
-interface DocumentRow {
-  name: string;
-  required: boolean;
-  fileName: string | null;
-}
-
 const BOARD_OPTIONS = [
   "SSC",
   "CBSE",
@@ -85,146 +41,34 @@ const BOARD_OPTIONS = [
   "Any Other Board",
 ];
 
-const DEFAULT_REGISTRATION: RegistrationData = {
-  schoolArea: "Within Maharashtra State",
-  status: "Previously Passed",
-  board: "CBSE",
-  seatNumber: "CBSE0001",
-  month: "March",
-  year: "2026",
-  name: "Ajit Pawar",
-};
-
-const DEFAULT_PERSONAL: PersonalData = {
-  fullName: "Ajit Pawar",
-  motherName: "SEEMA",
-  gender: "Male",
-  dob: "09/04/2012",
-  schoolName: "DHARMRAJ KANYA VIDYALAYA NAVEGAON PANDAV",
-  udise: "27131004203",
-  indexNumber: "",
-  residence: "AHILYANAGAR",
-  address: "kothrud pune",
-  pin: "414001",
-  state: "Maharashtra",
-  district: "AHILYANAGAR",
-  area: "PUNE",
-  city: "PUNE",
-  mobile1: "9493302559",
-  mobile2: "",
-  landline: "",
-  email: "",
-};
-
-const DEFAULT_CATEGORY: CategoryData = {
-  originalCategory: "General / Open",
-  admissionCategory: "General / Open",
-  minority: "Belongs to Minority Category",
-  linguisticMinority: "Konkani",
-  religiousMinority: "Muslim",
-  inhouse: "Yes, apply through Inhouse Quota",
-};
-
-const DEFAULT_MARKS: SubjectMark[] = [
-  { subject: "Subject 1", name: "Maths", marks: "100", outOf: "100" },
-  { subject: "Subject 2", name: "Science", marks: "90", outOf: "100" },
-  { subject: "Subject 3", name: "History", marks: "80", outOf: "100" },
-  { subject: "Subject 4", name: "English", marks: "100", outOf: "100" },
-  { subject: "Subject 5", name: "Marathi", marks: "100", outOf: "100" },
-];
-
-const DEFAULT_DOCUMENTS: DocumentRow[] = [
-  {
-    name: "10th Standard Marksheet (Non-SSC board marksheet is mandatory)",
-    required: true,
-    fileName: "marksheet.pdf",
-  },
-  { name: "School Leaving Certificate", required: false, fileName: null },
-  {
-    name: "Undertaking of Student for Documents Submission",
-    required: false,
-    fileName: null,
-  },
-  {
-    name: "Self Declaration of Student for Minority Quota",
-    required: false,
-    fileName: null,
-  },
-];
-
-const STORAGE_KEY = APPLICATION_DRAFT_KEY;
-
-interface StoredDraft {
-  current: number;
-  completed: number[];
-  locked: boolean;
-  registration: RegistrationData;
-  personal: PersonalData;
-  category: CategoryData;
-  passingStatus: string;
-  passedEnglish: string;
-  passedScience: string;
-  marks: SubjectMark[];
-  documents: DocumentRow[];
-}
-
-function loadDraft(): Partial<StoredDraft> | null {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
 export function ApplicationFormPage() {
   const navigate = useNavigate();
-  const draft = loadDraft();
-
-  const [current, setCurrent] = useState(draft?.current ?? 0);
-  const [completed, setCompleted] = useState<Set<number>>(new Set(draft?.completed ?? []));
-  const [locked, setLocked] = useState(draft?.locked ?? false);
-
-  const [registration, setRegistration] = useState<RegistrationData>(
-    draft?.registration ?? DEFAULT_REGISTRATION,
-  );
-  const [personal, setPersonal] = useState<PersonalData>(draft?.personal ?? DEFAULT_PERSONAL);
-  const [category, setCategory] = useState<CategoryData>(draft?.category ?? DEFAULT_CATEGORY);
-  const [passingStatus, setPassingStatus] = useState(draft?.passingStatus ?? "PASS");
-  const [passedEnglish, setPassedEnglish] = useState(draft?.passedEnglish ?? "Yes");
-  const [passedScience, setPassedScience] = useState(draft?.passedScience ?? "Yes");
-  const [marks, setMarks] = useState<SubjectMark[]>(draft?.marks ?? DEFAULT_MARKS);
-  const [documents, setDocuments] = useState<DocumentRow[]>(draft?.documents ?? DEFAULT_DOCUMENTS);
-  const [toastVisible, setToastVisible] = useState(false);
-
-  useEffect(() => {
-    const payload: StoredDraft = {
-      current,
-      completed: Array.from(completed),
-      locked,
-      registration,
-      personal,
-      category,
-      passingStatus,
-      passedEnglish,
-      passedScience,
-      marks,
-      documents,
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-  }, [
+  const {
     current,
+    setCurrent,
     completed,
+    setCompleted,
     locked,
+    setLocked,
     registration,
+    setRegistration,
     personal,
+    setPersonal,
     category,
+    setCategory,
     passingStatus,
+    setPassingStatus,
     passedEnglish,
+    setPassedEnglish,
     passedScience,
+    setPassedScience,
     marks,
+    setMarks,
     documents,
-  ]);
+    setDocuments,
+    payment,
+  } = useApplicationForm();
+  const [toastVisible, setToastVisible] = useState(false);
 
   const totalMarks = marks.reduce(
     (sum, row) => sum + (Number(row.marks) || 0),
@@ -372,7 +216,9 @@ export function ApplicationFormPage() {
               onFileChosen={handleFileChosen}
             />
           )}
-          {current === 5 && <PaymentStep />}
+          {current === 5 && (
+            <PaymentStep payment={payment} onPayNow={() => navigate("/payment-gateway")} />
+          )}
           {current === 6 && (
             <LockStep
               applicantName={personal.fullName}
@@ -381,6 +227,7 @@ export function ApplicationFormPage() {
               merit={meritOn500}
               documentsUploaded={documents.filter((d) => d.fileName).length}
               locked={locked}
+              paymentStatus={payment.status}
             />
           )}
 
@@ -975,60 +822,89 @@ function DocumentsStep({
   );
 }
 
-function PaymentStep() {
+function PaymentStep({
+  payment,
+  onPayNow,
+}: {
+  payment: PaymentData;
+  onPayNow: () => void;
+}) {
+  if (payment.status === "success") {
+    return (
+      <div className="app-form-section">
+        <p className="app-form-step-sub">
+          A one-time admission processing fee confirms your Part-I application.
+        </p>
+
+        <div className="app-form-pay-summary">
+          <div className="app-form-pay-cell">
+            <p className="app-form-pay-key">Amount</p>
+            <p className="app-form-pay-value app-form-pay-value--big">&#8377;{PAYMENT_AMOUNT}</p>
+          </div>
+          <div className="app-form-pay-cell">
+            <p className="app-form-pay-key">Status</p>
+            <p className="app-form-pay-value app-form-pay-value--success">SUCCESS</p>
+          </div>
+          <div className="app-form-pay-cell">
+            <p className="app-form-pay-key">Payment Mode</p>
+            <p className="app-form-pay-value">{payment.mode}</p>
+          </div>
+          <div className="app-form-pay-cell">
+            <p className="app-form-pay-key">Payment Date</p>
+            <p className="app-form-pay-value app-form-pay-value--small">{payment.date}</p>
+          </div>
+        </div>
+
+        <h2 className="app-form-section-title">Transaction Details</h2>
+        <div className="app-form-field-grid">
+          <TextField
+            className="ux4g-field--tight"
+            label="Transaction Reference Number"
+            value={payment.transactionRef ?? ""}
+            disabled
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="Payment Done By"
+            value="FYJC2026-00842"
+            disabled
+          />
+        </div>
+
+        <div className="app-form-callout">
+          <InfoIcon />
+          <span>
+            Any extra amount paid or deducted due to a duplicate or failed payment is
+            auto-refunded to the source account.
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app-form-section">
       <p className="app-form-step-sub">
         A one-time admission processing fee confirms your Part-I application.
       </p>
 
-      <div className="app-form-pay-summary">
-        <div className="app-form-pay-cell">
-          <p className="app-form-pay-key">Amount</p>
-          <p className="app-form-pay-value app-form-pay-value--big">
-            &#8377;100
-          </p>
+      {payment.status === "failed" && (
+        <div className="app-form-pay-failed">
+          <span>Your last payment attempt failed. No amount was deducted. Please try again.</span>
         </div>
-        <div className="app-form-pay-cell">
-          <p className="app-form-pay-key">Status</p>
-          <p className="app-form-pay-value app-form-pay-value--success">
-            SUCCESS
-          </p>
-        </div>
-        <div className="app-form-pay-cell">
-          <p className="app-form-pay-key">Payment Mode</p>
-          <p className="app-form-pay-value">UPI</p>
-        </div>
-        <div className="app-form-pay-cell">
-          <p className="app-form-pay-key">Payment Date</p>
-          <p className="app-form-pay-value app-form-pay-value--small">
-            09/04/2026 18:36:16
-          </p>
-        </div>
-      </div>
+      )}
 
-      <h2 className="app-form-section-title">Transaction Details</h2>
-      <div className="app-form-field-grid">
-        <TextField
-          className="ux4g-field--tight"
-          label="Transaction Reference Number"
-          value="07b8ff9f-9a7b-41dc-a893-eeab702f50f4"
-          disabled
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="Payment Done By"
-          value="FYJC2026-00842"
-          disabled
-        />
+      <div className="app-form-pay-pending">
+        <div>
+          <p className="app-form-pay-key">Amount Payable</p>
+          <p className="app-form-pay-value app-form-pay-value--big">&#8377;{PAYMENT_AMOUNT}</p>
+        </div>
+        <Button onClick={onPayNow}>Pay Now</Button>
       </div>
 
       <div className="app-form-callout">
         <InfoIcon />
-        <span>
-          Any extra amount paid or deducted due to a duplicate or failed payment
-          is auto-refunded to the source account.
-        </span>
+        <span>You will be redirected to a secure payment gateway to complete this transaction.</span>
       </div>
     </div>
   );
@@ -1041,6 +917,7 @@ function LockStep({
   merit,
   documentsUploaded,
   locked,
+  paymentStatus,
 }: {
   applicantName: string;
   board: string;
@@ -1048,6 +925,7 @@ function LockStep({
   merit: string;
   documentsUploaded: number;
   locked: boolean;
+  paymentStatus: PaymentData["status"];
 }) {
   return (
     <div className="app-form-section">
@@ -1080,7 +958,11 @@ function LockStep({
           label="Documents Uploaded"
           value={`${documentsUploaded} of 4`}
         />
-        <SummaryRow label="Fee Status" value="Paid — ₹100" success />
+        <SummaryRow
+          label="Fee Status"
+          value={paymentStatus === "success" ? `Paid — ₹${PAYMENT_AMOUNT}` : "Not Paid"}
+          success={paymentStatus === "success"}
+        />
       </div>
 
       <div className="app-form-callout">

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { APPLICATION_STEPS, loadApplicationDraftSummary } from "../../lib/applicationDraft";
+import { APPLICATION_STEPS } from "../../lib/applicationDraft";
+import { useApplicationForm } from "../../context/ApplicationFormContext";
 import "./DashboardPage.css";
 
 const STATS = [
@@ -72,10 +73,9 @@ export function DashboardPage() {
   const navigate = useNavigate();
   const [expandedNotice, setExpandedNotice] = useState<string | null>(null);
 
-  const draft = loadApplicationDraftSummary();
-  const currentStepIndex = draft?.current ?? 0;
-  const completedSteps = new Set(draft?.completed ?? []);
-  if (draft?.locked) completedSteps.add(APPLICATION_STEPS.length - 1);
+  const { current: currentStepIndex, completed, locked } = useApplicationForm();
+  const completedSteps = new Set(completed);
+  if (locked) completedSteps.add(APPLICATION_STEPS.length - 1);
 
   const progressSteps = APPLICATION_STEPS.map((label, index) => ({
     label,
@@ -86,12 +86,12 @@ export function DashboardPage() {
         : ("upcoming" as const),
   }));
 
-  const stepTag = draft?.locked
+  const stepTag = locked
     ? "Part I · Locked"
     : `Part I · Step ${currentStepIndex + 1} of ${APPLICATION_STEPS.length}`;
 
-  const ctaTitle = draft?.locked ? "Part I is locked" : "Continue your application";
-  const ctaDescription = draft?.locked
+  const ctaTitle = locked ? "Part I is locked" : "Continue your application";
+  const ctaDescription = locked
     ? "Your Part-I application is locked. Proceed to Part II from the sidebar."
     : `Pick up at "${APPLICATION_STEPS[currentStepIndex]}" — registration, personal, address and qualification details.`;
 
