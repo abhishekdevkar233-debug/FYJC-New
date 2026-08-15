@@ -111,53 +111,6 @@ export function DashboardPage() {
         ))}
       </div>
 
-      <section className="dashboard-section" aria-labelledby="progress-heading">
-        <div className="dashboard-section-head">
-          <h2 id="progress-heading">Application Progress</h2>
-          <span className="dashboard-section-tag">{stepTag}</span>
-        </div>
-        <ol className="progress-tracker">
-          {progressSteps.map((step, index) => {
-            const isDone = step.status === "done";
-            const badge = (
-              <span className="progress-step-badge">
-                {isDone ? "✓" : index + 1}
-              </span>
-            );
-            const label = (
-              <span className="progress-step-label">{step.label}</span>
-            );
-
-            return (
-              <li
-                key={step.label}
-                className={`progress-step progress-step--${step.status}`}
-                aria-current={step.status === "current" ? "step" : undefined}
-              >
-                {isDone ? (
-                  <span
-                    className="progress-step-static"
-                    aria-label={`${step.label} (completed, read only)`}
-                  >
-                    {badge}
-                    {label}
-                  </span>
-                ) : (
-                  <button
-                    type="button"
-                    className="progress-step-button"
-                    onClick={() => navigate("/application-form")}
-                  >
-                    {badge}
-                    {label}
-                  </button>
-                )}
-              </li>
-            );
-          })}
-        </ol>
-      </section>
-
       <div className="dashboard-cta">
         <div>
           <h2>{ctaTitle}</h2>
