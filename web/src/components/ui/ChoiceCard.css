@@ -24,6 +24,15 @@
   background-color: var(--color-surface-alt);
 }
 
+.choice-card--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.choice-card--disabled:hover {
+  border-color: var(--color-border);
+}
+
 .choice-card-input {
   position: absolute;
   width: 1px;

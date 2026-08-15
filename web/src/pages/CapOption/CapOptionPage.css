@@ -2,6 +2,173 @@
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 }
 
+.cap-medium-hint {
+  margin: 0 0 var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Stepper: keep each step label on one line */
+.cap-page .app-form-step-text {
+  max-width: none;
+  white-space: nowrap;
+}
+
+.cap-page .app-form-step-title {
+  white-space: nowrap;
+}
+
+.cap-page .app-form-stepper {
+  flex-wrap: nowrap;
+}
+
+.cap-page .app-form-step-trigger--locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.cap-page .app-form-step-trigger--locked:hover {
+  background-color: transparent;
+}
+
+/* Stream/Medium chip row */
+.cap-chip-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.cap-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* Selected Colleges cart */
+.cap-cart {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin: var(--space-3) 0 var(--space-5);
+  background-color: var(--color-surface);
+}
+
+.cap-cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.cap-cart-title {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cap-cart-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.cap-cart-counter {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--ux4g-primary);
+}
+
+.cap-set-prefs-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background-color: var(--ux4g-primary);
+  color: var(--color-text-on-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cap-set-prefs-cta:hover {
+  opacity: 0.9;
+}
+
+.cap-cart-track {
+  margin-bottom: var(--space-3);
+}
+
+.cap-cart-empty {
+  margin: var(--space-2) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.cap-cart-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.cap-cart-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px 8px 6px 12px;
+  border-radius: 999px;
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  max-width: 100%;
+}
+
+.cap-cart-chip-name {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cap-cart-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background-color: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cap-cart-chip-remove:hover {
+  background-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
 /* Limit / progress bar */
 .cap-limit-bar {
   display: flex;
@@ -59,6 +226,229 @@
   text-align: center;
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+}
+
+/* Section 2: Find Your College search panel */
+.cap-search-panel {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-5);
+  background-color: var(--color-surface);
+}
+
+.cap-search-panel .app-form-section-title {
+  margin-top: 0;
+}
+
+.cap-search-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.cap-search-input {
+  flex: 1 1 260px;
+}
+
+.cap-filters-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  height: 42px;
+}
+
+.cap-filters-btn:hover {
+  background-color: var(--color-surface-alt);
+}
+
+.cap-filters-btn--open {
+  border-color: var(--ux4g-primary);
+  color: var(--ux4g-primary);
+}
+
+.cap-filters-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background-color: var(--ux4g-primary);
+  color: var(--color-text-on-primary);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+}
+
+.cap-filters-drawer {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.cap-filters-drawer > .ux4g-field {
+  flex: 1 1 200px;
+}
+
+.cap-filters-clear {
+  margin-bottom: 10px;
+}
+
+.cap-filter-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.cap-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px 4px 12px;
+  border-radius: 999px;
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+}
+
+.cap-filter-chip button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background-color: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.cap-filter-chip button:hover {
+  background-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+/* Section 3: Available Colleges results */
+.cap-available-section {
+  margin-bottom: var(--space-5);
+}
+
+.cap-available-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.cap-available-title {
+  margin-top: 0;
+}
+
+.cap-available-count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.cap-college-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-3);
+}
+
+.cap-college-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+}
+
+.cap-college-card-actions {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-3);
+}
+
+.cap-college-card-actions .ux4g-btn {
+  flex: 1;
+  min-width: 0;
+  min-height: 38px;
+  padding: var(--space-2) var(--space-2);
+  font-size: 12px;
+  line-height: 1.25;
+  text-align: center;
+  white-space: normal;
+  word-break: normal;
+}
+
+/* Set Your Preferences section */
+.cap-preferences-section {
+  scroll-margin-top: 140px;
+  border: 1px solid var(--ux4g-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  background-color: var(--color-surface-alt);
+  margin-bottom: var(--space-4);
+}
+
+.cap-preferences-section .app-form-section-title {
+  margin-top: 0;
+}
+
+.cap-rank-list--scroll {
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* College details modal */
+.cap-details-list {
+  margin: 0 0 var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cap-details-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: var(--font-size-sm);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cap-details-list dt {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.cap-details-list dd {
+  margin: 0;
+  text-align: right;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Search results */
@@ -245,6 +635,76 @@
   color: var(--color-text-muted);
 }
 
+/* Preference table (review step) */
+.cap-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+}
+
+.cap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.cap-table thead th {
+  background-color: var(--color-surface-alt);
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cap-table tbody td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+  color: var(--color-text-primary);
+}
+
+.cap-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.cap-table-priority-col {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.cap-table-college-name {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+}
+
+.cap-table-college-address {
+  margin: 2px 0 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.cap-table-mono {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+.cap-table-muted {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+/* Confirm & lock section */
+.cap-confirm-section {
+  margin-top: var(--space-4);
+}
+
 .cap-summary-value {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
@@ -361,6 +821,10 @@
     width: 100%;
   }
 
+  .cap-college-card-actions {
+    flex-direction: column;
+  }
+
   .cap-rank-row {
     flex-wrap: wrap;
   }
@@ -368,5 +832,15 @@
   .cap-rank-row-actions {
     width: 100%;
     justify-content: flex-end;
+  }
+
+  .cap-search-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cap-filters-btn {
+    width: 100%;
+    justify-content: center;
   }
 }

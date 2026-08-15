@@ -29,8 +29,8 @@ export function CapOptionProvider({ children }: { children: ReactNode }) {
   const [current, setCurrent] = useState(0);
   const [completed, setCompleted] = useState<Set<number>>(new Set());
   const [locked, setLocked] = useState(false);
-  const [stream, setStream] = useState("Science");
-  const [medium, setMedium] = useState("English");
+  const [stream, setStream] = useState("");
+  const [medium, setMedium] = useState("");
   const [preferences, setPreferences] = useState<JuniorCollege[]>([]);
 
   function addCollege(college: JuniorCollege) {
