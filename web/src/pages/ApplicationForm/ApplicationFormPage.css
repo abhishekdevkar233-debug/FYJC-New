@@ -43,7 +43,6 @@
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   position: sticky;
-  top: calc(var(--site-header-total-height) + var(--app-form-topbar-height, 51px));
   z-index: 20;
 }
 
