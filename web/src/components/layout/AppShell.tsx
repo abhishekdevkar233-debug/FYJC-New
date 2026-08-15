@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { AccessibilityBar } from "./AccessibilityBar";
-import brandMarkPlaceholder from "../../assets/brand-mark-placeholder.svg";
-import brandLogoPlaceholder from "../../assets/brand-logo-placeholder.svg";
+import { SiteHeader } from "./SiteHeader";
 import "./AppShell.css";
 
 interface NavItem {
@@ -87,45 +85,15 @@ export function AppShell() {
 
   return (
     <div className="app-shell">
-      <AccessibilityBar />
-
-      <header className="app-header">
-        <div className="app-header-inner">
-          <div className="app-brand" aria-label="Application brand">
-            <div className="app-brand-mark" aria-hidden="true">
-              <img src="public/amblum.jpg" alt="" width="48" height="48" />
-            </div>
-
-            <span className="app-brand-divider" aria-hidden="true" />
-
-            <div className="app-brand-logo" aria-hidden="true">
-              <img src="public/state-icons.png" alt="" width="46" height="46" />
-            </div>
-
-            <div className="app-brand-copy">
-              <span className="app-brand-title">
-                Government of Maharashtra, School Education and Sports
-                Department
-              </span>
-              <span className="app-brand-subtitle">
-                Std. 11th Centralised Online Admission Process 2026–27
-              </span>
-            </div>
-          </div>
-
-          <div className="app-header-actions">
-            <button
-              type="button"
-              className="app-icon-button"
-              aria-label="Search"
-            >
+      <SiteHeader
+        mobileMenuOpen={menuOpen}
+        mobileMenuRef={menuRef}
+        rightContent={
+          <>
+            <button type="button" className="app-icon-button" aria-label="Search">
               <SearchIcon />
             </button>
-            <button
-              type="button"
-              className="app-action-button"
-              onClick={handleLogout}
-            >
+            <button type="button" className="app-action-button" onClick={handleLogout}>
               Logout
             </button>
             <button
@@ -137,41 +105,31 @@ export function AppShell() {
             >
               <MenuIcon />
             </button>
-          </div>
-        </div>
+          </>
+        }
+        mobileMenu={
+          <>
+            {NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.key}
+                to={item.to}
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) => `app-mobile-link ${isActive ? "app-mobile-link--active" : ""}`}
+              >
+                <span className="app-mobile-link-icon" aria-hidden="true">
+                  {item.icon}
+                </span>
+                <span>{item.label}</span>
+              </NavLink>
+            ))}
 
-        <div
-          ref={menuRef}
-          className={`app-mobile-menu ${menuOpen ? "is-open" : ""}`}
-          role="menu"
-          aria-label="Mobile navigation"
-        >
-          {NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.key}
-              to={item.to}
-              onClick={() => setMenuOpen(false)}
-              className={({ isActive }) =>
-                `app-mobile-link ${isActive ? "app-mobile-link--active" : ""}`
-              }
-            >
-              <span className="app-mobile-link-icon" aria-hidden="true">
-                {item.icon}
-              </span>
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
-
-          <button
-            type="button"
-            className="app-mobile-logout"
-            onClick={handleLogout}
-          >
-            <LogoutIcon />
-            <span>Logout</span>
-          </button>
-        </div>
-      </header>
+            <button type="button" className="app-mobile-logout" onClick={handleLogout}>
+              <LogoutIcon />
+              <span>Logout</span>
+            </button>
+          </>
+        }
+      />
 
       <div className="app-body">
         <aside className="app-sidebar" aria-label="Section navigation">
@@ -204,15 +162,7 @@ export function AppShell() {
 
 function SearchIcon() {
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden="true"
-    >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
       <circle cx="11" cy="11" r="5.5" />
       <path d="M16 16l5 5" strokeLinecap="round" />
     </svg>
@@ -221,15 +171,7 @@ function SearchIcon() {
 
 function MenuIcon() {
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden="true"
-    >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
       <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
     </svg>
   );
@@ -237,14 +179,7 @@ function MenuIcon() {
 
 function DashboardIcon() {
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
       <rect x="3" y="3" width="7" height="7" rx="1.5" />
       <rect x="14" y="3" width="7" height="7" rx="1.5" />
       <rect x="3" y="14" width="7" height="7" rx="1.5" />
@@ -255,14 +190,7 @@ function DashboardIcon() {
 
 function FormIcon() {
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
       <path
         d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"
         strokeLinejoin="round"
@@ -274,33 +202,16 @@ function FormIcon() {
 
 function CapIcon() {
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
       <path d="M12 4l9 4.5-9 4.5-9-4.5L12 4z" strokeLinejoin="round" />
-      <path
-        d="M6.5 10.8V15c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.2"
-        strokeLinecap="round"
-      />
+      <path d="M6.5 10.8V15c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.2" strokeLinecap="round" />
     </svg>
   );
 }
 
 function QuotaIcon() {
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
       <rect x="3" y="4" width="18" height="4" rx="1" />
       <rect x="3" y="10" width="12" height="4" rx="1" />
       <rect x="3" y="16" width="8" height="4" rx="1" />
@@ -320,14 +231,7 @@ function MiscIcon() {
 
 function AdmissionIcon() {
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M4 12l5 5L20 6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -335,24 +239,9 @@ function AdmissionIcon() {
 
 function LogoutIcon() {
   return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    >
-      <path
-        d="M9 3H5a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M16 17l5-5-5-5M21 12H9"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M9 3H5a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

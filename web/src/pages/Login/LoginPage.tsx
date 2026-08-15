@@ -4,6 +4,7 @@ import { Button } from "../../components/ui/Button";
 import { TextField } from "../../components/ui/TextField";
 import { PasswordField } from "../../components/ui/PasswordField";
 import { CaptchaField, generateCode } from "../../components/ui/CaptchaField";
+import { SiteHeader } from "../../components/layout/SiteHeader";
 import "./LoginPage.css";
 
 interface FormErrors {
@@ -60,17 +61,8 @@ export function LoginPage() {
 
   return (
     <div className="login-page">
+      <SiteHeader />
       <main className="login-page-content">
-        <div className="login-brand">
-          <div className="login-brand-emblem" aria-hidden="true">
-            FY
-          </div>
-          <div>
-            <p className="login-brand-title">FYJC Admission Portal</p>
-            <p className="login-brand-subtitle">First Year Junior College Admissions</p>
-          </div>
-        </div>
-
         <section className="login-card" aria-labelledby="login-heading">
           <header className="login-card-header">
             <h1 id="login-heading" className="login-card-title">

@@ -63,6 +63,20 @@
 
   /* Focus */
   --focus-ring-width: 3px;
+
+  /* Shared site header heights, used by any page rendering SiteHeader
+     (both AppShell and the public Login page) to align sticky offsets. */
+  --site-header-a11y-height: 42px;
+  --site-header-brand-height: 88px;
+  --site-header-total-height: calc(
+    var(--site-header-a11y-height) + var(--site-header-brand-height)
+  );
+}
+
+@media (max-width: 620px) {
+  :root {
+    --site-header-brand-height: 68px;
+  }
 }
 
 /* High-contrast mode, toggled by the accessibility bar */
