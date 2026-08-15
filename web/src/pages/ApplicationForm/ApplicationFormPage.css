@@ -26,18 +26,6 @@
   color: var(--ux4g-primary);
 }
 
-.app-form-status {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-1) var(--space-3);
-  border-radius: 999px;
-  background-color: var(--color-surface-alt);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-}
-
 .app-form-status-dot {
   width: 6px;
   height: 6px;

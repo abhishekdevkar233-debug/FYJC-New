@@ -788,10 +788,6 @@ function QualificationStep({
           </p>
           <p className="app-form-merit-value">{meritOn500}</p>
         </div>
-        <span className="app-form-status">
-          <span className="app-form-status-dot" />
-          Auto-calculated
-        </span>
       </div>
     </div>
   );
