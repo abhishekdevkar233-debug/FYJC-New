@@ -14,10 +14,10 @@ interface FormErrors {
 
 export function LoginPage() {
   const navigate = useNavigate();
-  const [loginId, setLoginId] = useState("");
-  const [password, setPassword] = useState("");
-  const [captchaValue, setCaptchaValue] = useState("");
+  const [loginId, setLoginId] = useState("demo.student@fyjc.in");
+  const [password, setPassword] = useState("Fyjc!Prev8w-Qz");
   const [captchaCode, setCaptchaCode] = useState(() => generateCode());
+  const [captchaValue, setCaptchaValue] = useState(captchaCode);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
 
