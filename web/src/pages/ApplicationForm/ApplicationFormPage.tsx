@@ -610,6 +610,65 @@ function CategoryStep({
         />
       </div>
 
+      <h2 className="app-form-section-title">
+        Other / Special Reservation Details
+      </h2>
+      <div className="app-form-yesno-list">
+        <YesNoField
+          letter="A"
+          name="handicapped"
+          label="Does Applicant belong to Handicapped (Divyang) / Hearing Disability Category?"
+          value={data.handicapped}
+          onChange={(v) => onChange({ ...data, handicapped: v })}
+        />
+        <YesNoField
+          letter="B"
+          name="earthquakeOrProjectAffected"
+          label="Does Applicant belong to Earthquake or Project Affected?"
+          value={data.earthquakeOrProjectAffected}
+          onChange={(v) =>
+            onChange({ ...data, earthquakeOrProjectAffected: v })
+          }
+        />
+        <YesNoField
+          letter="C"
+          name="parentTransferred"
+          label="Has Applicant's Parent been Transferred to Online Process Area?"
+          value={data.parentTransferred}
+          onChange={(v) => onChange({ ...data, parentTransferred: v })}
+        />
+        <YesNoField
+          letter="D"
+          name="grandparentsFreedomFighter"
+          label="Whether Applicant's Grandparents Freedom Fighters?"
+          value={data.grandparentsFreedomFighter}
+          onChange={(v) =>
+            onChange({ ...data, grandparentsFreedomFighter: v })
+          }
+        />
+        <YesNoField
+          letter="E"
+          name="parentDefenceServiceman"
+          label="Does Applicant's Parent(s) belong to Defence Serviceman / Ex-Serviceman Category?"
+          value={data.parentDefenceServiceman}
+          onChange={(v) => onChange({ ...data, parentDefenceServiceman: v })}
+        />
+        <YesNoField
+          letter="F"
+          name="sportsCategory"
+          label="Does Applicant belong to Sports Category?"
+          value={data.sportsCategory}
+          onChange={(v) => onChange({ ...data, sportsCategory: v })}
+        />
+        <YesNoField
+          letter="G"
+          name="orphanQuota"
+          label="If you are falling under category of orphan as per the provisions in GR dated 2nd April 2018, would you like to apply for 1% quota in the admission process?"
+          value={data.orphanQuota}
+          onChange={(v) => onChange({ ...data, orphanQuota: v })}
+        />
+      </div>
+
       <h2 className="app-form-section-title">Admission for Minority Quota</h2>
       <div className="app-form-choice-grid">
         <ChoiceCard
@@ -668,6 +727,49 @@ function CategoryStep({
           selected={data.inhouse === "No"}
           onSelect={() => onChange({ ...data, inhouse: "No" })}
         />
+      </div>
+    </div>
+  );
+}
+
+function YesNoField({
+  letter,
+  name,
+  label,
+  value,
+  onChange,
+}: {
+  letter: string;
+  name: string;
+  label: string;
+  value: "Yes" | "No";
+  onChange: (value: "Yes" | "No") => void;
+}) {
+  return (
+    <div className="app-form-yesno-row">
+      <p className="app-form-yesno-label">
+        <span className="app-form-yesno-letter">{letter}.</span> {label}
+        <span className="app-form-required">*</span>
+      </p>
+      <div className="app-form-yesno-options">
+        <label className="app-form-yesno-option">
+          <input
+            type="radio"
+            name={name}
+            checked={value === "Yes"}
+            onChange={() => onChange("Yes")}
+          />
+          Yes
+        </label>
+        <label className="app-form-yesno-option">
+          <input
+            type="radio"
+            name={name}
+            checked={value === "No"}
+            onChange={() => onChange("No")}
+          />
+          No
+        </label>
       </div>
     </div>
   );

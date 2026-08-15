@@ -35,6 +35,13 @@ export interface PersonalData {
 export interface CategoryData {
   originalCategory: string;
   admissionCategory: string;
+  handicapped: "Yes" | "No";
+  earthquakeOrProjectAffected: "Yes" | "No";
+  parentTransferred: "Yes" | "No";
+  grandparentsFreedomFighter: "Yes" | "No";
+  parentDefenceServiceman: "Yes" | "No";
+  sportsCategory: "Yes" | "No";
+  orphanQuota: "Yes" | "No";
   minority: "Belongs to Minority Category" | "Does Not Belong";
   linguisticMinority: string;
   religiousMinority: string;
@@ -95,6 +102,13 @@ const DEFAULT_PERSONAL: PersonalData = {
 const DEFAULT_CATEGORY: CategoryData = {
   originalCategory: "General / Open",
   admissionCategory: "General / Open",
+  handicapped: "No",
+  earthquakeOrProjectAffected: "No",
+  parentTransferred: "No",
+  grandparentsFreedomFighter: "No",
+  parentDefenceServiceman: "No",
+  sportsCategory: "No",
+  orphanQuota: "No",
   minority: "Belongs to Minority Category",
   linguisticMinority: "Konkani",
   religiousMinority: "Muslim",

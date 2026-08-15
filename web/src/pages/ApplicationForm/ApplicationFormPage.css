@@ -233,6 +233,72 @@
   margin-bottom: var(--space-2);
 }
 
+.app-form-yesno-list {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+  overflow: hidden;
+}
+
+.app-form-yesno-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+}
+
+.app-form-yesno-row + .app-form-yesno-row {
+  border-top: 1px solid var(--color-border);
+}
+
+.app-form-yesno-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  margin: 0;
+  flex: 1;
+}
+
+.app-form-yesno-letter {
+  font-weight: var(--font-weight-bold);
+  color: var(--ux4g-primary);
+}
+
+.app-form-required {
+  color: var(--color-danger, #d92d20);
+  margin-left: var(--space-1);
+}
+
+.app-form-yesno-options {
+  display: flex;
+  gap: var(--space-4);
+  flex-shrink: 0;
+}
+
+.app-form-yesno-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.app-form-yesno-option input {
+  accent-color: var(--ux4g-primary);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .app-form-yesno-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 /* Field grid */
 .app-form-field-grid {
   display: grid;
