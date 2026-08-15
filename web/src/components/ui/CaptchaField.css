@@ -1,0 +1,54 @@
+.ux4g-captcha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.ux4g-captcha-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) 1.4fr;
+  gap: var(--space-3);
+}
+
+.ux4g-captcha-code {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-surface-alt);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  padding-inline: var(--space-4);
+  min-height: 48px;
+  font-family: "Courier New", monospace;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.3em;
+  color: var(--color-text-primary);
+}
+
+.ux4g-captcha-refresh {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.ux4g-captcha-refresh:hover {
+  color: var(--ux4g-primary);
+}
+
+.ux4g-captcha-refresh:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .ux4g-captcha-row {
+    grid-template-columns: 1fr;
+  }
+}

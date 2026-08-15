@@ -1,0 +1,48 @@
+.ux4g-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-6);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  min-height: 44px;
+}
+
+.ux4g-btn:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.ux4g-btn-primary {
+  background-color: var(--ux4g-primary);
+  color: var(--color-text-on-primary);
+}
+
+.ux4g-btn-primary:hover {
+  background-color: var(--ux4g-primary-hover);
+}
+
+.ux4g-btn-primary:active {
+  background-color: var(--ux4g-primary-dark);
+}
+
+.ux4g-btn-primary:disabled {
+  background-color: var(--color-border-strong);
+  cursor: not-allowed;
+}
+
+.ux4g-btn-secondary {
+  background-color: var(--color-surface);
+  color: var(--ux4g-primary);
+  border-color: var(--ux4g-primary);
+}
+
+.ux4g-btn-secondary:hover {
+  background-color: var(--color-surface-alt);
+}

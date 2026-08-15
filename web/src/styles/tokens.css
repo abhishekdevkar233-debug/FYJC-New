@@ -1,0 +1,64 @@
+/*
+  Design tokens.
+  --ux4g-primary is the verified UX4G Design System 3.0 token (doc.ux4g.gov.in).
+  All other values are proposed to match UX4G's government-appropriate,
+  low-decoration visual language until verified against the live UX4G Storybook.
+*/
+:root {
+  /* Color */
+  --ux4g-primary: #4a2bc2;
+  --ux4g-primary-hover: #3c22a3;
+  --ux4g-primary-dark: #2f1b80;
+
+  --color-bg: #f4f4f8;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f7f7fb;
+  --color-border: #d8d8e2;
+  --color-border-strong: #b6b6c8;
+
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #55556b;
+  --color-text-muted: #7a7a8c;
+  --color-text-on-primary: #ffffff;
+
+  --color-error: #b3261e;
+  --color-error-bg: #fbeceb;
+  --color-success: #1e6b3a;
+  --color-focus-ring: #4a2bc2;
+
+  /* Typography */
+  --font-family-base: "Inter", "Segoe UI", "Roboto", system-ui, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --line-height-base: 1.5;
+
+  /* Spacing (4px scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Shape */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Elevation — kept minimal per no-clutter direction */
+  --shadow-sm: 0 1px 2px rgba(26, 26, 46, 0.06);
+  --shadow-md: 0 2px 8px rgba(26, 26, 46, 0.08);
+
+  /* Focus */
+  --focus-ring-width: 3px;
+}

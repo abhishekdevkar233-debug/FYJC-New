@@ -1,0 +1,130 @@
+.login-page {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+.login-page-content {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+  width: 100%;
+}
+
+.login-brand-emblem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background-color: var(--ux4g-primary);
+  color: var(--color-text-on-primary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+.login-brand-title {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+}
+
+.login-brand-subtitle {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.login-card {
+  width: 100%;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.login-card-header {
+  padding: var(--space-8) var(--space-8) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.login-card-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.login-card-subtitle {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.login-form {
+  padding: var(--space-8);
+}
+
+.login-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+  font-size: var(--font-size-sm);
+}
+
+.login-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.login-checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--ux4g-primary);
+}
+
+.login-link {
+  color: var(--ux4g-primary);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+.login-link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.login-submit {
+  width: 100%;
+}
+
+.login-footnote {
+  margin-top: var(--space-6);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
