@@ -31,6 +31,16 @@ const STEP_TAB_LABELS = [
   "Lock Application",
 ];
 
+const STEP_DESCRIPTIONS = [
+  "10th board details",
+  "Identity & address",
+  "Reservation details",
+  "Marks & merit",
+  "Upload files",
+  "Pay processing fee",
+  "Review & submit",
+];
+
 const BOARD_OPTIONS = [
   "SSC",
   "CBSE",
@@ -143,32 +153,53 @@ export function ApplicationFormPage() {
         <ol className="app-form-stepper">
           {STEPS.map((fullLabel, index) => {
             const tabLabel = STEP_TAB_LABELS[index];
+            const description = STEP_DESCRIPTIONS[index];
             const isDone =
               completed.has(index) || (locked && index === STEPS.length - 1);
             const isCurrent = index === current;
+            const isLast = index === STEPS.length - 1;
             return (
-              <li key={fullLabel} className="app-form-step-item">
+              <li
+                key={fullLabel}
+                className={`app-form-step-item ${!isLast ? "app-form-step-item--grow" : ""}`}
+              >
                 {isDone ? (
                   <span
-                    className="app-form-step app-form-step--done"
+                    className="app-form-step-trigger app-form-step-trigger--done"
                     aria-label={`${fullLabel} (completed, read only)`}
                   >
-                    <span className="app-form-step-badge">
+                    <span className="app-form-step-badge app-form-step-badge--done">
                       <StepCheckIcon />
                     </span>
-                    <span className="app-form-step-label">{tabLabel}</span>
+                    <span className="app-form-step-text">
+                      <span className="app-form-step-title">{tabLabel}</span>
+                      <span className="app-form-step-desc">{description}</span>
+                    </span>
                   </span>
                 ) : (
                   <button
                     type="button"
-                    className={`app-form-step ${isCurrent ? "app-form-step--current" : ""}`}
+                    className={`app-form-step-trigger ${isCurrent ? "app-form-step-trigger--current" : ""}`}
                     onClick={() => goTo(index)}
                     aria-current={isCurrent ? "step" : undefined}
                     aria-label={fullLabel}
                   >
-                    <span className="app-form-step-badge">{index + 1}</span>
-                    <span className="app-form-step-label">{tabLabel}</span>
+                    <span
+                      className={`app-form-step-badge ${isCurrent ? "app-form-step-badge--current" : ""}`}
+                    >
+                      {index + 1}
+                    </span>
+                    <span className="app-form-step-text">
+                      <span className="app-form-step-title">{tabLabel}</span>
+                      <span className="app-form-step-desc">{description}</span>
+                    </span>
                   </button>
+                )}
+                {!isLast && (
+                  <span
+                    className={`app-form-step-separator ${isDone ? "app-form-step-separator--done" : ""}`}
+                    aria-hidden="true"
+                  />
                 )}
               </li>
             );
@@ -1013,8 +1044,8 @@ function SummaryRow({
 function StepCheckIcon() {
   return (
     <svg
-      width="10"
-      height="10"
+      width="14"
+      height="14"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"

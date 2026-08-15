@@ -64,3 +64,24 @@
   /* Focus */
   --focus-ring-width: 3px;
 }
+
+/* High-contrast mode, toggled by the accessibility bar */
+:root[data-contrast="high"] {
+  --ux4g-primary: #2b1780;
+  --ux4g-primary-hover: #1f1060;
+  --ux4g-primary-dark: #1a0d52;
+
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f0f0f0;
+  --color-border: #000000;
+  --color-border-strong: #000000;
+
+  --color-text-primary: #000000;
+  --color-text-secondary: #1a1a1a;
+  --color-text-muted: #3a3a3a;
+
+  --color-error: #8f0000;
+  --color-success: #0b4d24;
+  --color-focus-ring: #000000;
+}

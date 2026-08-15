@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { AccessibilityBar } from "./AccessibilityBar";
+import brandMarkPlaceholder from "../../assets/brand-mark-placeholder.svg";
+import brandLogoPlaceholder from "../../assets/brand-logo-placeholder.svg";
 import "./AppShell.css";
 
 interface NavItem {
@@ -56,17 +59,21 @@ export function AppShell() {
   useEffect(() => {
     if (!menuOpen) return;
 
-    function handleClickOutside(event: MouseEvent) {
+    const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setMenuOpen(false);
       }
-    }
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setMenuOpen(false);
-    }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
+    };
 
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscape);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
@@ -80,46 +87,89 @@ export function AppShell() {
 
   return (
     <div className="app-shell">
-      <header className="app-topbar">
-        <div className="app-topbar-identity">
-          <span className="app-topbar-emblem" aria-hidden="true">
-            FY
-          </span>
-          <div className="app-topbar-title">
-            <p className="app-topbar-dept">FYJC Admission Portal</p>
-            <p className="app-topbar-sub">
-              Std. XI Centralised Online Admission Process 2026&ndash;27
-            </p>
+      <AccessibilityBar />
+
+      <header className="app-header">
+        <div className="app-header-inner">
+          <div className="app-brand" aria-label="Application brand">
+            <div className="app-brand-mark" aria-hidden="true">
+              <img src="public/amblum.jpg" alt="" width="48" height="48" />
+            </div>
+
+            <span className="app-brand-divider" aria-hidden="true" />
+
+            <div className="app-brand-logo" aria-hidden="true">
+              <img src="public/state-icons.png" alt="" width="46" height="46" />
+            </div>
+
+            <div className="app-brand-copy">
+              <span className="app-brand-title">
+                Government of Maharashtra, School Education and Sports
+                Department
+              </span>
+              <span className="app-brand-subtitle">
+                Std. 11th Centralised Online Admission Process 2026–27
+              </span>
+            </div>
+          </div>
+
+          <div className="app-header-actions">
+            <button
+              type="button"
+              className="app-icon-button"
+              aria-label="Search"
+            >
+              <SearchIcon />
+            </button>
+            <button
+              type="button"
+              className="app-action-button"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+            <button
+              type="button"
+              className="app-menu-toggle"
+              onClick={() => setMenuOpen((value) => !value)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+            >
+              <MenuIcon />
+            </button>
           </div>
         </div>
-        <div className="app-topbar-who" ref={menuRef}>
-          <div className="app-topbar-who-text">
-            <p className="app-topbar-name">Abhishek Devkar</p>
-            <p className="app-topbar-role">Applicant</p>
-          </div>
+
+        <div
+          ref={menuRef}
+          className={`app-mobile-menu ${menuOpen ? "is-open" : ""}`}
+          role="menu"
+          aria-label="Mobile navigation"
+        >
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.key}
+              to={item.to}
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
+                `app-mobile-link ${isActive ? "app-mobile-link--active" : ""}`
+              }
+            >
+              <span className="app-mobile-link-icon" aria-hidden="true">
+                {item.icon}
+              </span>
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
+
           <button
             type="button"
-            className="app-topbar-avatar"
-            aria-haspopup="true"
-            aria-expanded={menuOpen}
-            aria-label="Account menu"
-            onClick={() => setMenuOpen((open) => !open)}
+            className="app-mobile-logout"
+            onClick={handleLogout}
           >
-            AP
+            <LogoutIcon />
+            <span>Logout</span>
           </button>
-          {menuOpen && (
-            <div className="app-topbar-menu" role="menu">
-              <button
-                type="button"
-                className="app-topbar-menu-item"
-                role="menuitem"
-                onClick={handleLogout}
-              >
-                <LogoutIcon />
-                <span>Logout</span>
-              </button>
-            </div>
-          )}
         </div>
       </header>
 
@@ -149,6 +199,39 @@ export function AppShell() {
         </main>
       </div>
     </div>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="5.5" />
+      <path d="M16 16l5 5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden="true"
+    >
+      <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
+    </svg>
   );
 }
 

@@ -64,82 +64,112 @@
 .app-form-stepper {
   list-style: none;
   margin: 0;
-  padding: 0 var(--space-6);
+  padding: 10px 12px;
   display: flex;
-  gap: 50px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: flex-start;
 }
 
 .app-form-step-item {
-  flex: none;
-}
-
-.app-form-step {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-3) 6px;
-  background: none;
-  border: none;
-  border-bottom: 3px solid transparent;
-  cursor: pointer;
-  white-space: nowrap;
-  font-family: inherit;
-  line-height: 1;
+  flex: none;
+  min-width: 0;
 }
 
-.app-form-step--done {
+.app-form-step-item--grow {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.app-form-step-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  padding: var(--space-1);
+  border-radius: var(--radius-md);
+  min-width: 0;
+}
+
+.app-form-step-trigger--done {
   cursor: default;
 }
 
-.app-form-step:focus-visible {
+.app-form-step-trigger:not(.app-form-step-trigger--done):hover {
+  background-color: var(--color-surface-alt);
+}
+
+.app-form-step-trigger:focus-visible {
   outline: var(--focus-ring-width) solid var(--color-focus-ring);
-  outline-offset: -3px;
+  outline-offset: 2px;
 }
 
 .app-form-step-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  border: 1.5px solid var(--color-border-strong);
   font-family: var(--font-family-mono);
-  font-size: 11px;
-  line-height: 1;
+  font-size: 10px;
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
-  background-color: var(--color-surface);
+  background-color: var(--color-surface-alt);
   flex-shrink: 0;
 }
 
-.app-form-step-label {
-  font-size: 13px;
-  line-height: 1;
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
-}
-
-.app-form-step--current {
-  border-bottom-color: var(--ux4g-primary);
-}
-
-.app-form-step--current .app-form-step-badge {
+.app-form-step-badge--current {
   background-color: var(--ux4g-primary);
-  border-color: var(--ux4g-primary);
   color: var(--color-text-on-primary);
 }
 
-.app-form-step--current .app-form-step-label {
-  color: var(--ux4g-primary);
-  font-weight: var(--font-weight-semibold);
-}
-
-.app-form-step--done .app-form-step-badge {
+.app-form-step-badge--done {
   background-color: var(--color-success);
-  border-color: var(--color-success);
   color: var(--color-text-on-primary);
+}
+
+.app-form-step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  white-space: normal;
+  max-width: 92px;
+  min-width: 0;
+}
+
+.app-form-step-title {
+  font-size: 11px;
+  line-height: 1.15;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.app-form-step-trigger--current .app-form-step-title {
+  color: var(--ux4g-primary);
+}
+
+.app-form-step-desc {
+  font-size: 9.5px;
+  line-height: 1.15;
+  color: var(--color-text-muted);
+}
+
+.app-form-step-separator {
+  flex: 1;
+  min-width: 8px;
+  height: 2px;
+  margin: 0 6px;
+  background-color: var(--color-border);
+}
+
+.app-form-step-separator--done {
+  background-color: var(--color-success);
 }
 
 /* Card shell */
@@ -623,5 +653,25 @@
 
   .app-form-summary-grid {
     grid-template-columns: 1fr;
+  }
+
+  .app-form-stepper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .app-form-step-item,
+  .app-form-step-item--grow {
+    flex: none;
+  }
+
+  .app-form-step-text {
+    white-space: nowrap;
+    max-width: none;
+  }
+
+  .app-form-step-separator {
+    flex: none;
+    width: 24px;
   }
 }
