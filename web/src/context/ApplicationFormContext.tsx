@@ -68,11 +68,11 @@ const DEFAULT_REGISTRATION: RegistrationData = {
   seatNumber: "CBSE0001",
   month: "March",
   year: "2026",
-  name: "Ajit Pawar",
+  name: "Abhishek Devkar",
 };
 
 const DEFAULT_PERSONAL: PersonalData = {
-  fullName: "Ajit Pawar",
+  fullName: "Abhishek Devkar",
   motherName: "SEEMA",
   gender: "Male",
   dob: "09/04/2012",
@@ -116,8 +116,16 @@ const DEFAULT_DOCUMENTS: DocumentRow[] = [
     fileName: "marksheet.pdf",
   },
   { name: "School Leaving Certificate", required: false, fileName: null },
-  { name: "Undertaking of Student for Documents Submission", required: false, fileName: null },
-  { name: "Self Declaration of Student for Minority Quota", required: false, fileName: null },
+  {
+    name: "Undertaking of Student for Documents Submission",
+    required: false,
+    fileName: null,
+  },
+  {
+    name: "Self Declaration of Student for Minority Quota",
+    required: false,
+    fileName: null,
+  },
 ];
 
 const DEFAULT_PAYMENT: PaymentData = {
@@ -127,11 +135,15 @@ const DEFAULT_PAYMENT: PaymentData = {
   date: null,
 };
 
-function pickFemaleVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
+function pickFemaleVoice(
+  voices: SpeechSynthesisVoice[],
+): SpeechSynthesisVoice | null {
   const byKeyword = voices.find((v) => /female/i.test(v.name));
   if (byKeyword) return byKeyword;
   const byName = voices.find((v) =>
-    /zira|samantha|victoria|karen|moira|tessa|fiona|susan|google uk english female/i.test(v.name),
+    /zira|samantha|victoria|karen|moira|tessa|fiona|susan|google uk english female/i.test(
+      v.name,
+    ),
   );
   return byName ?? null;
 }
@@ -188,13 +200,15 @@ interface ApplicationFormContextValue {
   resolvePayment: (result: "success" | "failed") => void;
 }
 
-const ApplicationFormContext = createContext<ApplicationFormContextValue | null>(null);
+const ApplicationFormContext =
+  createContext<ApplicationFormContextValue | null>(null);
 
 export function ApplicationFormProvider({ children }: { children: ReactNode }) {
   const [current, setCurrent] = useState(0);
   const [completed, setCompleted] = useState<Set<number>>(new Set());
   const [locked, setLocked] = useState(false);
-  const [registration, setRegistration] = useState<RegistrationData>(DEFAULT_REGISTRATION);
+  const [registration, setRegistration] =
+    useState<RegistrationData>(DEFAULT_REGISTRATION);
   const [personal, setPersonal] = useState<PersonalData>(DEFAULT_PERSONAL);
   const [category, setCategory] = useState<CategoryData>(DEFAULT_CATEGORY);
   const [passingStatus, setPassingStatus] = useState("PASS");
@@ -214,7 +228,12 @@ export function ApplicationFormProvider({ children }: { children: ReactNode }) {
       });
       speak("Your payment is successful.");
     } else {
-      setPayment({ status: "failed", transactionRef: null, mode: null, date: null });
+      setPayment({
+        status: "failed",
+        transactionRef: null,
+        mode: null,
+        date: null,
+      });
       speak("Payment failed. Please try again.");
     }
   }
@@ -256,7 +275,9 @@ export function ApplicationFormProvider({ children }: { children: ReactNode }) {
 export function useApplicationForm(): ApplicationFormContextValue {
   const ctx = useContext(ApplicationFormContext);
   if (!ctx) {
-    throw new Error("useApplicationForm must be used within an ApplicationFormProvider");
+    throw new Error(
+      "useApplicationForm must be used within an ApplicationFormProvider",
+    );
   }
   return ctx;
 }

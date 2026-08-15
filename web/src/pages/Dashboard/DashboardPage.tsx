@@ -1,194 +1,348 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { APPLICATION_STEPS } from "../../lib/applicationDraft";
+import type { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 import { useApplicationForm } from "../../context/ApplicationFormContext";
 import "./DashboardPage.css";
 
-const STATS = [
-  { label: "Application No.", value: "FYJC2026-00842" },
-  { label: "Merit Marks", value: "470.00 / 500" },
-  { label: "Documents", value: "1 of 4" },
-  { label: "Fee Status", value: "Paid" },
+const APPLICANT_INFO_LEFT = [
+  { label: "User Login ID", value: "FYJC2026-00842", icon: <UserIcon /> },
+  { label: "User Type", value: "Applicant", icon: <UserIcon /> },
+  { label: "User Name", value: "Abhishek Devkar", icon: <UserIcon /> },
 ];
 
-const QUICK_ACTIONS = [
+const APPLICANT_INFO_RIGHT = [
+  { label: "IP Address", value: "122.160.12.45", icon: <GlobeIcon /> },
   {
-    label: "CAP Option (Part II)",
-    description: "Choose your stream, medium and preferred Junior Colleges.",
+    label: "Current Login Time",
+    value: "15 Aug 2026, 10:30 AM",
+    icon: <ClockIcon />,
+  },
+  {
+    label: "Previous Login Time",
+    value: "14 Aug 2026, 07:45 PM",
+    icon: <HistoryIcon />,
+  },
+];
+
+const CHOICE_FORMS = [
+  {
+    key: "cap-option",
+    label: "CAP Option Form",
+    icon: <ListIcon />,
+    tag: "in-progress" as const,
+    description: "You have not submitted your preferences yet.",
+    date: null,
+    actionLabel: "Continue",
     to: "/cap-option",
-    icon: <CapIcon />,
   },
   {
-    label: "Quota Choices (Part II)",
-    description:
-      "Apply separately for In-House, Minority or Management quota seats.",
+    key: "in-house",
+    label: "In-House Choice Form",
+    icon: <HomeIcon />,
+    tag: "done" as const,
+    description: null,
+    date: "13 Aug 2026",
+    actionLabel: "View Details",
     to: "/quota",
-    icon: <QuotaIcon />,
   },
   {
-    label: "Miscellaneous",
-    description: "Payment history, grievances and other account utilities.",
-    to: "/miscellaneous",
-    icon: <MiscIcon />,
+    key: "minority",
+    label: "Minority Choice Form",
+    icon: <PeopleIcon />,
+    tag: "done" as const,
+    description: null,
+    date: "13 Aug 2026",
+    actionLabel: "View Details",
+    to: "/quota",
   },
   {
-    label: "CAP Admission",
-    description: "Track your seat allotment across every CAP round.",
-    to: "/cap-admission",
-    icon: <AdmissionIcon />,
+    key: "management",
+    label: "Management Choice Form",
+    icon: <BriefcaseIcon />,
+    tag: "done" as const,
+    description: null,
+    date: "13 Aug 2026",
+    actionLabel: "View Details",
+    to: "/quota",
   },
-];
-
-const NOTICES = [
-  {
-    id: "n1",
-    title: "Round 7 CAP schedule published",
-    date: "12 Aug 2026",
-    description:
-      "The provisional schedule for CAP Round 7 option form submission and seat allotment has been published. Review the dates below and complete your Part-II options before the deadline.",
-  },
-  {
-    id: "n2",
-    title: "Document verification centres list updated",
-    date: "08 Aug 2026",
-    description:
-      "An updated list of document verification centres for your district is now available. Carry original documents along with one photocopy for verification.",
-  },
-  {
-    id: "n3",
-    title: "Helpline hours extended during CAP rounds",
-    date: "03 Aug 2026",
-    description:
-      "The admission helpline will remain available for extended hours on all working days until the end of the current CAP round to assist with queries.",
-  },
-];
-
-const IMPORTANT_DATES = [
-  { label: "Round 7 option form submission", date: "18 – 21 Aug 2026" },
-  { label: "Round 7 seat allotment declared", date: "24 Aug 2026" },
-  { label: "Round 7 admission confirmation", date: "25 – 27 Aug 2026" },
 ];
 
 export function DashboardPage() {
   const navigate = useNavigate();
-  const [expandedNotice, setExpandedNotice] = useState<string | null>(null);
-
-  const { current: currentStepIndex, completed, locked } = useApplicationForm();
-  const completedSteps = new Set(completed);
-  if (locked) completedSteps.add(APPLICATION_STEPS.length - 1);
-
-  const progressSteps = APPLICATION_STEPS.map((label, index) => ({
-    label,
-    status: completedSteps.has(index)
-      ? ("done" as const)
-      : index === currentStepIndex
-        ? ("current" as const)
-        : ("upcoming" as const),
-  }));
-
-  const stepTag = locked
-    ? "Part I · Locked"
-    : `Part I · Step ${currentStepIndex + 1} of ${APPLICATION_STEPS.length}`;
-
-  const ctaTitle = locked ? "Part I is locked" : "Continue your application";
-  const ctaDescription = locked
-    ? "Your Part-I application is locked. Proceed to Part II from the sidebar."
-    : `Pick up at "${APPLICATION_STEPS[currentStepIndex]}" — registration, personal, address and qualification details.`;
+  const { locked } = useApplicationForm();
 
   return (
     <div className="dashboard-page">
-      <div className="dashboard-page-head">
-        <h1>Dashboard</h1>
-        <p>A quick snapshot of your Std. XI admission application.</p>
-      </div>
-
-      <div className="dashboard-stat-grid">
-        {STATS.map((stat) => (
-          <div className="dashboard-stat-card" key={stat.label}>
-            <p className="dashboard-stat-label">{stat.label}</p>
-            <p className="dashboard-stat-value">{stat.value}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="dashboard-cta">
+      <div className="dashboard-greeting">
         <div>
-          <h2>{ctaTitle}</h2>
-          <p>{ctaDescription}</p>
+          <h1>
+            Good Morning, Abhishek! <span aria-hidden="true">👋</span>
+          </h1>
+          <p>Let&rsquo;s get you one step closer to your Class 11 admission.</p>
+        </div>
+      </div>
+
+      <section className="dashboard-panel">
+        <h2 className="dashboard-panel-title">
+          <UserIcon />
+          Applicant Information
+        </h2>
+        <div className="dashboard-info-grid">
+          <div className="dashboard-info-col">
+            {APPLICANT_INFO_LEFT.map((row) => (
+              <InfoRow key={row.label} {...row} />
+            ))}
+          </div>
+          <div className="dashboard-info-col dashboard-info-col--right">
+            {APPLICANT_INFO_RIGHT.map((row) => (
+              <InfoRow key={row.label} {...row} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="dashboard-section">
+        <h2 className="dashboard-section-title">
+          Application Form (Part-I) Status
+        </h2>
+        <div className="dashboard-status-grid">
+          <button
+            type="button"
+            className="dashboard-status-card"
+            onClick={() => navigate("/application-form")}
+          >
+            <span
+              className={`dashboard-status-icon ${locked ? "dashboard-status-icon--done" : "dashboard-status-icon--pending"}`}
+            >
+              <DocCheckIcon />
+            </span>
+            <span className="dashboard-status-body">
+              <span className="dashboard-status-head">
+                <span className="dashboard-status-name">Application Form</span>
+                <span
+                  className={`dashboard-tag ${locked ? "dashboard-tag--done" : "dashboard-tag--pending"}`}
+                >
+                  {locked ? "Completed" : "In Progress"}
+                </span>
+              </span>
+              <span className="dashboard-status-desc">
+                {locked ? (
+                  <>
+                    Submitted on <strong>Application locked</strong>
+                  </>
+                ) : (
+                  "Continue where you left off"
+                )}
+              </span>
+            </span>
+            <ChevronRightIcon />
+          </button>
+
+          <div className="dashboard-status-card dashboard-status-card--static">
+            <span className="dashboard-status-icon dashboard-status-icon--info">
+              <BuildingIcon />
+            </span>
+            <span className="dashboard-status-body">
+              <span className="dashboard-status-head">
+                <span className="dashboard-status-name">Admission Status</span>
+                <span className="dashboard-tag dashboard-tag--info">
+                  Awaiting Allotment
+                </span>
+              </span>
+              <span className="dashboard-status-desc">
+                CAP Round 1 Allotment result <strong>To be announced</strong>
+              </span>
+            </span>
+            <ChevronRightIcon />
+          </div>
+        </div>
+      </section>
+
+      <section className="dashboard-section">
+        <h2 className="dashboard-section-title">
+          Choice Forms (Part-II) Status
+        </h2>
+        <div className="dashboard-choice-grid">
+          {CHOICE_FORMS.map((form) => (
+            <div className="dashboard-choice-card" key={form.key}>
+              <span
+                className={`dashboard-status-icon ${form.tag === "done" ? "dashboard-status-icon--done" : "dashboard-status-icon--pending"}`}
+              >
+                {form.icon}
+              </span>
+              <span className="dashboard-choice-name">{form.label}</span>
+              <span
+                className={`dashboard-tag ${form.tag === "done" ? "dashboard-tag--done" : "dashboard-tag--pending"}`}
+              >
+                {form.tag === "done" ? "Completed" : "In Progress"}
+              </span>
+              <span className="dashboard-choice-desc">
+                {form.description ?? (
+                  <>
+                    Submitted on <br /> {form.date}
+                  </>
+                )}
+              </span>
+              <button
+                type="button"
+                className={`dashboard-choice-btn ${form.tag === "done" ? "dashboard-choice-btn--done" : "dashboard-choice-btn--pending"}`}
+                onClick={() => navigate(form.to)}
+              >
+                {form.actionLabel}
+                <ChevronRightIcon />
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="dashboard-help">
+        <span className="dashboard-help-icon" aria-hidden="true">
+          <HeadsetIcon />
+        </span>
+        <div className="dashboard-help-text">
+          <p className="dashboard-help-title">Need Help?</p>
+          <p className="dashboard-help-desc">
+            Check our Help Centre or raise a ticket. We&rsquo;re here to assist
+            you!
+          </p>
         </div>
         <button
-          className="dashboard-cta-button"
-          onClick={() => navigate("/application-form")}
+          type="button"
+          className="dashboard-help-btn"
+          onClick={() => navigate("/miscellaneous")}
         >
-          Open Application Form (Part I) &rarr;
+          Help &amp; Support
+          <ChevronRightIcon />
         </button>
-      </div>
+      </section>
     </div>
   );
 }
 
-function CapIcon() {
+function InfoRow({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: string;
+  icon: ReactNode;
+}) {
+  return (
+    <div className="dashboard-info-row">
+      <span className="dashboard-info-icon" aria-hidden="true">
+        {icon}
+      </span>
+      <span className="dashboard-info-label">{label}</span>
+      <span className="dashboard-info-sep">:</span>
+      <span className="dashboard-info-value">{value}</span>
+    </div>
+  );
+}
+
+function UserIcon() {
   return (
     <svg
-      width="20"
-      height="20"
+      width="16"
+      height="16"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.8"
     >
-      <path d="M12 4l9 4.5-9 4.5-9-4.5L12 4z" strokeLinejoin="round" />
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function GlobeIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <circle cx="12" cy="12" r="9" />
       <path
-        d="M6.5 10.8V15c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.2"
+        d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"
         strokeLinecap="round"
       />
     </svg>
   );
 }
 
-function QuotaIcon() {
+function ClockIcon() {
   return (
     <svg
-      width="20"
-      height="20"
+      width="16"
+      height="16"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.8"
     >
-      <rect x="3" y="4" width="18" height="4" rx="1" />
-      <rect x="3" y="10" width="12" height="4" rx="1" />
-      <rect x="3" y="16" width="8" height="4" rx="1" />
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3.5 2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-function MiscIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <circle cx="5" cy="12" r="1.6" fill="currentColor" />
-      <circle cx="12" cy="12" r="1.6" fill="currentColor" />
-      <circle cx="19" cy="12" r="1.6" fill="currentColor" />
-    </svg>
-  );
-}
-
-function AdmissionIcon() {
+function HistoryIcon() {
   return (
     <svg
-      width="20"
-      height="20"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path d="M3 12a9 9 0 1 0 3-6.7" strokeLinecap="round" />
+      <path d="M3 4v5h5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 8v5l3 2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function BellIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path
+        d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"
+        strokeLinejoin="round"
+      />
+      <path d="M10 19a2 2 0 0 0 4 0" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ChevronDownIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
     >
-      <path d="M4 12l5 5L20 6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-function ChevronIcon() {
+function ChevronRightIcon() {
   return (
     <svg
       width="16"
@@ -198,7 +352,131 @@ function ChevronIcon() {
       stroke="currentColor"
       strokeWidth="2"
     >
-      <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function DocCheckIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path
+        d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"
+        strokeLinejoin="round"
+      />
+      <path d="M9 13l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function BuildingIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path d="M4 21V7l8-4 8 4v14" strokeLinejoin="round" />
+      <path
+        d="M9 21v-6h6v6M9 11h.01M15 11h.01M9 7h.01M15 7h.01"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function ListIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path d="M8 6h13M8 12h13M8 18h13" strokeLinecap="round" />
+      <path d="M3 6h.01M3 12h.01M3 18h.01" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function HomeIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path d="M3 11l9-7 9 7" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 10v10h14V10" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function PeopleIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <circle cx="9" cy="8" r="3" />
+      <path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6" strokeLinecap="round" />
+      <path
+        d="M16 5.5a3 3 0 0 1 0 5.8M22 20c0-2.8-2.2-5.1-5-5.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function BriefcaseIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <rect x="3" y="7" width="18" height="13" rx="2" />
+      <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function HeadsetIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path d="M4 13v-1a8 8 0 0 1 16 0v1" strokeLinecap="round" />
+      <rect x="3" y="13" width="4" height="6" rx="1.5" />
+      <rect x="17" y="13" width="4" height="6" rx="1.5" />
+      <path d="M19 19v1a3 3 0 0 1-3 3h-2" strokeLinecap="round" />
     </svg>
   );
 }
