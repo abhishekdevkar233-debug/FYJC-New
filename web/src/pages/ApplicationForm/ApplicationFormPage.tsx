@@ -31,16 +31,6 @@ const STEP_TAB_LABELS = [
   "Lock Application",
 ];
 
-const STEP_DESCRIPTIONS = [
-  "10th board details",
-  "Identity & address",
-  "Reservation details",
-  "Marks & merit",
-  "Upload files",
-  "Pay processing fee",
-  "Review & submit",
-];
-
 const BOARD_OPTIONS = [
   "SSC",
   "CBSE",
@@ -153,7 +143,6 @@ export function ApplicationFormPage() {
         <ol className="app-form-stepper">
           {STEPS.map((fullLabel, index) => {
             const tabLabel = STEP_TAB_LABELS[index];
-            const description = STEP_DESCRIPTIONS[index];
             const isDone =
               completed.has(index) || (locked && index === STEPS.length - 1);
             const isCurrent = index === current;
@@ -173,7 +162,6 @@ export function ApplicationFormPage() {
                     </span>
                     <span className="app-form-step-text">
                       <span className="app-form-step-title">{tabLabel}</span>
-                      <span className="app-form-step-desc">{description}</span>
                     </span>
                   </span>
                 ) : (
@@ -191,7 +179,6 @@ export function ApplicationFormPage() {
                     </span>
                     <span className="app-form-step-text">
                       <span className="app-form-step-title">{tabLabel}</span>
-                      <span className="app-form-step-desc">{description}</span>
                     </span>
                   </button>
                 )}
