@@ -100,7 +100,6 @@ export function ApplicationFormPage() {
     if (current < STEPS.length - 1) {
       goTo(current + 1);
     }
-    showSavedToast();
   }
 
   function handlePrev() {
@@ -217,7 +216,10 @@ export function ApplicationFormPage() {
             />
           )}
           {current === 5 && (
-            <PaymentStep payment={payment} onPayNow={() => navigate("/payment-gateway")} />
+            <PaymentStep
+              payment={payment}
+              onPayNow={() => navigate("/payment-gateway")}
+            />
           )}
           {current === 6 && (
             <LockStep
@@ -246,10 +248,14 @@ export function ApplicationFormPage() {
                 </Button>
               ) : (
                 <>
-                  <Button variant="secondary" type="button" onClick={handleSaveDraft}>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={handleSaveDraft}
+                  >
                     Save Draft
                   </Button>
-                  <Button onClick={handleNext}>Save &amp; Next &rarr;</Button>
+                  <Button onClick={handleNext}>Next &rarr;</Button>
                 </>
               )}
             </div>
@@ -285,10 +291,6 @@ function RegistrationStep({
 }) {
   return (
     <div className="app-form-section">
-      <p className="app-form-req-note">
-        <span className="app-form-req">*</span> indicates a required field
-      </p>
-
       <h2 className="app-form-section-title">Applicant's 10th School Area</h2>
       <div className="app-form-choice-grid">
         <ChoiceCard
@@ -403,10 +405,6 @@ function PersonalStep({
 
   return (
     <div className="app-form-section">
-      <p className="app-form-req-note">
-        <span className="app-form-req">*</span> indicates a required field
-      </p>
-
       <h2 className="app-form-section-title">Applicant Identity</h2>
       <div className="app-form-field-grid">
         <TextField
@@ -839,11 +837,15 @@ function PaymentStep({
         <div className="app-form-pay-summary">
           <div className="app-form-pay-cell">
             <p className="app-form-pay-key">Amount</p>
-            <p className="app-form-pay-value app-form-pay-value--big">&#8377;{PAYMENT_AMOUNT}</p>
+            <p className="app-form-pay-value app-form-pay-value--big">
+              &#8377;{PAYMENT_AMOUNT}
+            </p>
           </div>
           <div className="app-form-pay-cell">
             <p className="app-form-pay-key">Status</p>
-            <p className="app-form-pay-value app-form-pay-value--success">SUCCESS</p>
+            <p className="app-form-pay-value app-form-pay-value--success">
+              SUCCESS
+            </p>
           </div>
           <div className="app-form-pay-cell">
             <p className="app-form-pay-key">Payment Mode</p>
@@ -851,7 +853,9 @@ function PaymentStep({
           </div>
           <div className="app-form-pay-cell">
             <p className="app-form-pay-key">Payment Date</p>
-            <p className="app-form-pay-value app-form-pay-value--small">{payment.date}</p>
+            <p className="app-form-pay-value app-form-pay-value--small">
+              {payment.date}
+            </p>
           </div>
         </div>
 
@@ -874,8 +878,8 @@ function PaymentStep({
         <div className="app-form-callout">
           <InfoIcon />
           <span>
-            Any extra amount paid or deducted due to a duplicate or failed payment is
-            auto-refunded to the source account.
+            Any extra amount paid or deducted due to a duplicate or failed
+            payment is auto-refunded to the source account.
           </span>
         </div>
       </div>
@@ -890,21 +894,29 @@ function PaymentStep({
 
       {payment.status === "failed" && (
         <div className="app-form-pay-failed">
-          <span>Your last payment attempt failed. No amount was deducted. Please try again.</span>
+          <span>
+            Your last payment attempt failed. No amount was deducted. Please try
+            again.
+          </span>
         </div>
       )}
 
       <div className="app-form-pay-pending">
         <div>
           <p className="app-form-pay-key">Amount Payable</p>
-          <p className="app-form-pay-value app-form-pay-value--big">&#8377;{PAYMENT_AMOUNT}</p>
+          <p className="app-form-pay-value app-form-pay-value--big">
+            &#8377;{PAYMENT_AMOUNT}
+          </p>
         </div>
         <Button onClick={onPayNow}>Pay Now</Button>
       </div>
 
       <div className="app-form-callout">
         <InfoIcon />
-        <span>You will be redirected to a secure payment gateway to complete this transaction.</span>
+        <span>
+          You will be redirected to a secure payment gateway to complete this
+          transaction.
+        </span>
       </div>
     </div>
   );
@@ -960,7 +972,11 @@ function LockStep({
         />
         <SummaryRow
           label="Fee Status"
-          value={paymentStatus === "success" ? `Paid — ₹${PAYMENT_AMOUNT}` : "Not Paid"}
+          value={
+            paymentStatus === "success"
+              ? `Paid — ₹${PAYMENT_AMOUNT}`
+              : "Not Paid"
+          }
           success={paymentStatus === "success"}
         />
       </div>
@@ -996,7 +1012,14 @@ function SummaryRow({
 
 function StepCheckIcon() {
   return (
-    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+    <svg
+      width="10"
+      height="10"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+    >
       <path d="M4 12l5 5L20 6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
