@@ -1,0 +1,73 @@
+.choice-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  cursor: pointer;
+  background-color: var(--color-surface);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.choice-card:hover {
+  border-color: var(--ux4g-primary);
+}
+
+.choice-card:has(.choice-card-input:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.choice-card--selected {
+  border-color: var(--ux4g-primary);
+  background-color: var(--color-surface-alt);
+}
+
+.choice-card-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.choice-card-radio {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-border-strong);
+  flex-shrink: 0;
+  margin-top: 2px;
+  position: relative;
+}
+
+.choice-card--selected .choice-card-radio {
+  border-color: var(--ux4g-primary);
+}
+
+.choice-card--selected .choice-card-radio::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background-color: var(--ux4g-primary);
+}
+
+.choice-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.choice-card-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.choice-card-desc {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}

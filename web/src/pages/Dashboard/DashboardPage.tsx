@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { APPLICATION_STEPS, loadApplicationDraftSummary } from "../../lib/applicationDraft";
 import "./DashboardPage.css";
 
 const STATS = [
@@ -7,16 +8,6 @@ const STATS = [
   { label: "Merit Marks", value: "470.00 / 500" },
   { label: "Documents", value: "1 of 4" },
   { label: "Fee Status", value: "Paid" },
-];
-
-const PROGRESS_STEPS = [
-  { label: "Registration", status: "done" as const },
-  { label: "Personal & Address", status: "done" as const },
-  { label: "Category & Reservation", status: "current" as const },
-  { label: "Qualification", status: "upcoming" as const },
-  { label: "Documents", status: "upcoming" as const },
-  { label: "Admission Fee", status: "upcoming" as const },
-  { label: "Lock Application", status: "upcoming" as const },
 ];
 
 const QUICK_ACTIONS = [
@@ -81,6 +72,29 @@ export function DashboardPage() {
   const navigate = useNavigate();
   const [expandedNotice, setExpandedNotice] = useState<string | null>(null);
 
+  const draft = loadApplicationDraftSummary();
+  const currentStepIndex = draft?.current ?? 0;
+  const completedSteps = new Set(draft?.completed ?? []);
+  if (draft?.locked) completedSteps.add(APPLICATION_STEPS.length - 1);
+
+  const progressSteps = APPLICATION_STEPS.map((label, index) => ({
+    label,
+    status: completedSteps.has(index)
+      ? ("done" as const)
+      : index === currentStepIndex
+        ? ("current" as const)
+        : ("upcoming" as const),
+  }));
+
+  const stepTag = draft?.locked
+    ? "Part I · Locked"
+    : `Part I · Step ${currentStepIndex + 1} of ${APPLICATION_STEPS.length}`;
+
+  const ctaTitle = draft?.locked ? "Part I is locked" : "Continue your application";
+  const ctaDescription = draft?.locked
+    ? "Your Part-I application is locked. Proceed to Part II from the sidebar."
+    : `Pick up at "${APPLICATION_STEPS[currentStepIndex]}" — registration, personal, address and qualification details.`;
+
   return (
     <div className="dashboard-page">
       <div className="dashboard-page-head">
@@ -100,12 +114,10 @@ export function DashboardPage() {
       <section className="dashboard-section" aria-labelledby="progress-heading">
         <div className="dashboard-section-head">
           <h2 id="progress-heading">Application Progress</h2>
-          <span className="dashboard-section-tag">
-            Part I &middot; Step 3 of 7
-          </span>
+          <span className="dashboard-section-tag">{stepTag}</span>
         </div>
         <ol className="progress-tracker">
-          {PROGRESS_STEPS.map((step, index) => {
+          {progressSteps.map((step, index) => {
             const isDone = step.status === "done";
             const badge = (
               <span className="progress-step-badge">
@@ -148,10 +160,8 @@ export function DashboardPage() {
 
       <div className="dashboard-cta">
         <div>
-          <h2>Continue your application</h2>
-          <p>
-            Part-I registration, personal, address and qualification details.
-          </p>
+          <h2>{ctaTitle}</h2>
+          <p>{ctaDescription}</p>
         </div>
         <button
           className="dashboard-cta-button"

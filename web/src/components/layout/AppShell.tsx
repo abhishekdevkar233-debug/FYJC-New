@@ -10,12 +10,42 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { key: "dashboard", label: "Dashboard", to: "/dashboard", icon: <DashboardIcon /> },
-  { key: "application-form", label: "Application Form (Part I)", to: "/application-form", icon: <FormIcon /> },
-  { key: "cap-option", label: "CAP Option (Part II)", to: "/cap-option", icon: <CapIcon /> },
-  { key: "quota", label: "Quota Choices (Part II)", to: "/quota", icon: <QuotaIcon /> },
-  { key: "misc", label: "Miscellaneous", to: "/miscellaneous", icon: <MiscIcon /> },
-  { key: "cap-admission", label: "CAP Admission", to: "/cap-admission", icon: <AdmissionIcon /> },
+  {
+    key: "dashboard",
+    label: "Dashboard",
+    to: "/dashboard",
+    icon: <DashboardIcon />,
+  },
+  {
+    key: "application-form",
+    label: "Application Form (Part I)",
+    to: "/application-form",
+    icon: <FormIcon />,
+  },
+  {
+    key: "cap-option",
+    label: "CAP Option (Part II)",
+    to: "/cap-option",
+    icon: <CapIcon />,
+  },
+  {
+    key: "quota",
+    label: "Quota Choices (Part II)",
+    to: "/quota",
+    icon: <QuotaIcon />,
+  },
+  {
+    key: "misc",
+    label: "Miscellaneous",
+    to: "/miscellaneous",
+    icon: <MiscIcon />,
+  },
+  {
+    key: "cap-admission",
+    label: "CAP Admission",
+    to: "/cap-admission",
+    icon: <AdmissionIcon />,
+  },
 ];
 
 export function AppShell() {
@@ -57,12 +87,14 @@ export function AppShell() {
           </span>
           <div className="app-topbar-title">
             <p className="app-topbar-dept">FYJC Admission Portal</p>
-            <p className="app-topbar-sub">Std. XI Centralised Online Admission Process 2026&ndash;27</p>
+            <p className="app-topbar-sub">
+              Std. XI Centralised Online Admission Process 2026&ndash;27
+            </p>
           </div>
         </div>
         <div className="app-topbar-who" ref={menuRef}>
           <div className="app-topbar-who-text">
-            <p className="app-topbar-name">Applicant Name</p>
+            <p className="app-topbar-name">Ajit Pawar</p>
             <p className="app-topbar-role">Applicant</p>
           </div>
           <button
@@ -77,7 +109,12 @@ export function AppShell() {
           </button>
           {menuOpen && (
             <div className="app-topbar-menu" role="menu">
-              <button type="button" className="app-topbar-menu-item" role="menuitem" onClick={handleLogout}>
+              <button
+                type="button"
+                className="app-topbar-menu-item"
+                role="menuitem"
+                onClick={handleLogout}
+              >
                 <LogoutIcon />
                 <span>Logout</span>
               </button>
@@ -117,7 +154,14 @@ export function AppShell() {
 
 function DashboardIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
       <rect x="3" y="3" width="7" height="7" rx="1.5" />
       <rect x="14" y="3" width="7" height="7" rx="1.5" />
       <rect x="3" y="14" width="7" height="7" rx="1.5" />
@@ -128,8 +172,18 @@ function DashboardIcon() {
 
 function FormIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" strokeLinejoin="round" />
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path
+        d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"
+        strokeLinejoin="round"
+      />
       <path d="M9 12h6M9 16h6M9 8h3" strokeLinecap="round" />
     </svg>
   );
@@ -137,16 +191,33 @@ function FormIcon() {
 
 function CapIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
       <path d="M12 4l9 4.5-9 4.5-9-4.5L12 4z" strokeLinejoin="round" />
-      <path d="M6.5 10.8V15c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.2" strokeLinecap="round" />
+      <path
+        d="M6.5 10.8V15c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
 function QuotaIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
       <rect x="3" y="4" width="18" height="4" rx="1" />
       <rect x="3" y="10" width="12" height="4" rx="1" />
       <rect x="3" y="16" width="8" height="4" rx="1" />
@@ -166,7 +237,14 @@ function MiscIcon() {
 
 function AdmissionIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M4 12l5 5L20 6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -174,9 +252,24 @@ function AdmissionIcon() {
 
 function LogoutIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M9 3H5a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round" />
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path
+        d="M9 3H5a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M16 17l5-5-5-5M21 12H9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

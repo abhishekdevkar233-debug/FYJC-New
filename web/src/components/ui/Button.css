@@ -43,6 +43,16 @@
   border-color: var(--ux4g-primary);
 }
 
-.ux4g-btn-secondary:hover {
+.ux4g-btn-secondary:hover:not(:disabled) {
   background-color: var(--color-surface-alt);
+}
+
+.ux4g-btn:disabled {
+  cursor: not-allowed;
+}
+
+.ux4g-btn-secondary:disabled {
+  background-color: var(--color-surface-alt);
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
 }

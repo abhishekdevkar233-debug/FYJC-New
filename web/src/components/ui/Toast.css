@@ -1,0 +1,35 @@
+.ux4g-toast {
+  position: fixed;
+  right: var(--space-6);
+  bottom: var(--space-6);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background-color: var(--color-success);
+  color: var(--color-text-on-primary);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  animation: ux4g-toast-in 0.2s ease;
+}
+
+@keyframes ux4g-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .ux4g-toast {
+    left: var(--space-4);
+    right: var(--space-4);
+  }
+}

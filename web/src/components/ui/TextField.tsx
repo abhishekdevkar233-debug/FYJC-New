@@ -16,7 +16,7 @@ export function TextField({ label, error, icon, id, className = "", ...rest }: T
   return (
     <div className={`ux4g-field ${className}`}>
       <label htmlFor={inputId} className="ux4g-field-label">
-        {label}
+        {label} {rest.required && <span className="ux4g-field-required">*</span>}
       </label>
       <div className={`ux4g-field-control ${error ? "ux4g-field-control--error" : ""}`}>
         {icon && (
