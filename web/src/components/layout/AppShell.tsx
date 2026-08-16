@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { SiteHeader } from "./SiteHeader";
 import "./AppShell.css";
 
 interface NavItem {
@@ -51,89 +49,15 @@ const NAV_ITEMS: NavItem[] = [
 
 export function AppShell() {
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuOpen(false);
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [menuOpen]);
 
   function handleLogout() {
-    setMenuOpen(false);
     navigate("/");
   }
 
   return (
     <div className="app-shell">
-      <SiteHeader
-        mobileMenuOpen={menuOpen}
-        mobileMenuRef={menuRef}
-        rightContent={
-          <>
-            <button type="button" className="app-icon-button" aria-label="Search">
-              <SearchIcon />
-            </button>
-            <button type="button" className="app-action-button" onClick={handleLogout}>
-              Logout
-            </button>
-            <button
-              type="button"
-              className="app-menu-toggle"
-              onClick={() => setMenuOpen((value) => !value)}
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={menuOpen}
-            >
-              <MenuIcon />
-            </button>
-          </>
-        }
-        mobileMenu={
-          <>
-            {NAV_ITEMS.map((item) => (
-              <NavLink
-                key={item.key}
-                to={item.to}
-                onClick={() => setMenuOpen(false)}
-                className={({ isActive }) => `app-mobile-link ${isActive ? "app-mobile-link--active" : ""}`}
-              >
-                <span className="app-mobile-link-icon" aria-hidden="true">
-                  {item.icon}
-                </span>
-                <span>{item.label}</span>
-              </NavLink>
-            ))}
-
-            <button type="button" className="app-mobile-logout" onClick={handleLogout}>
-              <LogoutIcon />
-              <span>Logout</span>
-            </button>
-          </>
-        }
-      />
-
       <div className="app-body">
         <aside className="app-sidebar" aria-label="Section navigation">
-          <p className="app-sidebar-label">Admission Portal</p>
           <nav className="app-sidebar-nav">
             {NAV_ITEMS.map((item) => (
               <NavLink
@@ -150,6 +74,11 @@ export function AppShell() {
               </NavLink>
             ))}
           </nav>
+
+          <button type="button" className="app-sidebar-logout" onClick={handleLogout}>
+            <LogoutIcon />
+            <span>Logout</span>
+          </button>
         </aside>
 
         <main className="app-main">
@@ -157,23 +86,6 @@ export function AppShell() {
         </main>
       </div>
     </div>
-  );
-}
-
-function SearchIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-      <circle cx="11" cy="11" r="5.5" />
-      <path d="M16 16l5 5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function MenuIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-      <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
-    </svg>
   );
 }
 

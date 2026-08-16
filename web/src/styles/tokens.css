@@ -9,6 +9,7 @@
   --ux4g-primary: #4a2bc2;
   --ux4g-primary-hover: #3c22a3;
   --ux4g-primary-dark: #2f1b80;
+  --ux4g-primary-rgb: 74, 43, 194;
 
   --color-bg: #f4f4f8;
   --color-surface: #ffffff;
@@ -23,25 +24,29 @@
 
   --color-error: #b3261e;
   --color-error-bg: #fbeceb;
+  --color-error-rgb: 179, 38, 30;
   --color-success: #1e6b3a;
+  --color-success-rgb: 30, 107, 58;
   --color-focus-ring: #4a2bc2;
 
-  /* Typography */
+  /* Typography — a single scale used everywhere; no ad hoc font-sizes. */
   --font-family-base: "Inter", "Segoe UI", "Roboto", system-ui, sans-serif;
   --font-family-heading: var(--font-family-base);
   --font-family-mono: var(--font-family-base);
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.25rem;
-  --font-size-xl: 1.5rem;
+  --font-size-xs: 0.75rem; /* 12px — micro labels, table headers, badges */
+  --font-size-sm: 0.875rem; /* 14px — secondary text, buttons, form labels */
+  --font-size-base: 1rem; /* 16px — body text, inputs */
+  --font-size-lg: 1.25rem; /* 20px — card/section headings, emphasized stats */
+  --font-size-xl: 1.5rem; /* 24px — page titles */
+  --font-size-2xl: 2rem; /* 32px — hero figures (e.g. payment amount) */
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --line-height-base: 1.5;
+  --line-height-tight: 1.2;
 
-  /* Spacing (4px scale) */
+  /* Spacing (8px scale, with 4px half-step) */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -56,10 +61,12 @@
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
+  --radius-pill: 999px;
 
   /* Elevation — kept minimal per no-clutter direction */
   --shadow-sm: 0 1px 2px rgba(26, 26, 46, 0.06);
   --shadow-md: 0 2px 8px rgba(26, 26, 46, 0.08);
+  --shadow-lg: 0 20px 40px rgba(26, 26, 46, 0.18);
 
   /* Focus */
   --focus-ring-width: 3px;
@@ -84,6 +91,7 @@
   --ux4g-primary: #2b1780;
   --ux4g-primary-hover: #1f1060;
   --ux4g-primary-dark: #1a0d52;
+  --ux4g-primary-rgb: 43, 23, 128;
 
   --color-bg: #ffffff;
   --color-surface: #ffffff;
@@ -96,6 +104,8 @@
   --color-text-muted: #3a3a3a;
 
   --color-error: #8f0000;
+  --color-error-rgb: 143, 0, 0;
   --color-success: #0b4d24;
+  --color-success-rgb: 11, 77, 36;
   --color-focus-ring: #000000;
 }

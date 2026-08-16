@@ -41,6 +41,16 @@
   clip: rect(0, 0, 0, 0);
 }
 
+.choice-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  color: var(--ux4g-primary);
+}
+
 .choice-card-radio {
   width: 18px;
   height: 18px;

@@ -69,7 +69,7 @@
 .pay-gateway-amount-value {
   margin: 0 0 var(--space-2);
   font-family: var(--font-family-mono);
-  font-size: 2rem;
+  font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--ux4g-primary-dark);
 }

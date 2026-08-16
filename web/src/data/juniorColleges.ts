@@ -36,7 +36,7 @@ export const DISTRICT_OPTIONS = [
   "Mumbai City/Suburban",
 ];
 
-export const JUNIOR_COLLEGES: JuniorCollege[] = [
+const CURATED_COLLEGES: JuniorCollege[] = [
   {
     id: "PN8430SFE",
     choiceCode: "PN8430SFE",
@@ -325,4 +325,57 @@ export const JUNIOR_COLLEGES: JuniorCollege[] = [
     status: "Aided",
     fees: 2100,
   },
+];
+
+// Ensures every Stream + Medium combination the student can pick on Step 1
+// has enough Junior Colleges to search & choose from.
+const MIN_PER_COMBINATION = 14;
+const STATUS_CYCLE: JuniorCollege["status"][] = ["Self Financed", "Aided", "Government"];
+const NAME_TEMPLATES = [
+  "{district} {stream} Junior College",
+  "New Horizon {stream} Junior College, {district}",
+  "{district} Vidyalaya Junior College ({stream})",
+  "Shree Ganesh Junior College of {stream}, {district}",
+  "Sunrise {medium} Medium Junior College, {district}",
+  "{district} Model Junior College ({stream})",
+  "{medium} Medium Junior College of {stream}, {district}",
+];
+
+function buildGeneratedColleges(): JuniorCollege[] {
+  const generated: JuniorCollege[] = [];
+  for (const stream of STREAM_OPTIONS) {
+    for (const medium of MEDIUM_OPTIONS) {
+      const existingCount = CURATED_COLLEGES.filter(
+        (c) => c.stream === stream && c.medium === medium,
+      ).length;
+      const needed = Math.max(0, MIN_PER_COMBINATION - existingCount);
+      for (let i = 0; i < needed; i++) {
+        const district = DISTRICT_OPTIONS[i % DISTRICT_OPTIONS.length];
+        const template = NAME_TEMPLATES[i % NAME_TEMPLATES.length];
+        const name = template
+          .replaceAll("{district}", district)
+          .replaceAll("{stream}", stream)
+          .replaceAll("{medium}", medium);
+        const code = `${stream.slice(0, 1)}${medium.slice(0, 2)}${String(i + 1).padStart(2, "0")}G`.toUpperCase();
+        generated.push({
+          id: code,
+          choiceCode: code,
+          name,
+          address: `${district} Education Campus, Near Main Road, ${district}`,
+          district,
+          taluka: `${district} Taluka`,
+          stream,
+          medium,
+          status: STATUS_CYCLE[i % STATUS_CYCLE.length],
+          fees: (i % 6) * 2500 + (medium === "English" ? 5000 : 1500),
+        });
+      }
+    }
+  }
+  return generated;
+}
+
+export const JUNIOR_COLLEGES: JuniorCollege[] = [
+  ...CURATED_COLLEGES,
+  ...buildGeneratedColleges(),
 ];

@@ -126,19 +126,6 @@ export function ApplicationFormPage() {
 
   return (
     <div className="app-form-page">
-      <div className="app-form-topbar">
-        <div>
-          Application Form No.{" "}
-          <span className="app-form-id">FYJC2026-00842</span>
-        </div>
-        <span
-          className={`app-form-status ${locked ? "app-form-status--locked" : ""}`}
-        >
-          <span className="app-form-status-dot" />
-          {locked ? "Locked" : "In Progress"}
-        </span>
-      </div>
-
       <div className="app-form-stepper-wrap">
         <ol className="app-form-stepper">
           {STEPS.map((fullLabel, index) => {

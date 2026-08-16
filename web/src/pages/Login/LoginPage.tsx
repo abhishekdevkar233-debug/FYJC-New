@@ -4,7 +4,6 @@ import { Button } from "../../components/ui/Button";
 import { TextField } from "../../components/ui/TextField";
 import { PasswordField } from "../../components/ui/PasswordField";
 import { CaptchaField, generateCode } from "../../components/ui/CaptchaField";
-import { SiteHeader } from "../../components/layout/SiteHeader";
 import "./LoginPage.css";
 
 interface FormErrors {
@@ -15,7 +14,7 @@ interface FormErrors {
 
 export function LoginPage() {
   const navigate = useNavigate();
-  const [loginId, setLoginId] = useState("demo.student@fyjc.in");
+  const [loginId, setLoginId] = useState("abhishek.devkar@vinsys.com");
   const [password, setPassword] = useState("Fyjc!Prev8w-Qz");
   const [captchaCode, setCaptchaCode] = useState(() => generateCode());
   const [captchaValue, setCaptchaValue] = useState(captchaCode);
@@ -61,7 +60,6 @@ export function LoginPage() {
 
   return (
     <div className="login-page">
-      <SiteHeader />
       <main className="login-page-content">
         <section className="login-card" aria-labelledby="login-heading">
           <header className="login-card-header">

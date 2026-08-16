@@ -2,89 +2,23 @@
   position: sticky;
   top: var(--site-header-a11y-height);
   z-index: 30;
-  background: #f1f2f5;
-  border-bottom: 1px solid rgba(39, 46, 64, 0.18);
+  background-color: var(--color-surface-alt);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .app-header-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: flex-end;
+  gap: var(--space-4);
   min-height: var(--site-header-brand-height);
-  padding: 0 1.5rem;
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.app-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-.app-brand-mark {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  overflow: hidden;
-}
-
-.app-brand-mark img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.app-brand-divider {
-  display: none;
-}
-
-.app-brand-logo {
-  width: 46px;
-  height: 46px;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  overflow: hidden;
-}
-
-.app-brand-logo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.app-brand-copy {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-  min-width: 0;
-  margin-left: 0.25rem;
-}
-
-.app-brand-title {
-  font-size: 18px;
-  font-weight: 500;
-  color: #171a22;
-}
-
-.app-brand-subtitle {
-  font-size: 0.8rem;
-  color: #4f5568;
+  padding: 0 var(--space-6);
 }
 
 .app-header-actions {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: var(--space-5);
   flex-shrink: 0;
 }
 
@@ -103,20 +37,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.7rem;
+  border-radius: var(--radius-md);
   background: transparent;
-  color: #2b1780;
+  color: var(--ux4g-primary);
   cursor: pointer;
-  transition:
-    background-color 0.18s ease,
-    transform 0.18s ease;
+  transition: background-color 0.18s ease;
 }
 
 .app-icon-button:hover,
 .app-menu-toggle:hover,
 .app-icon-button:focus-visible,
 .app-menu-toggle:focus-visible {
-  background: rgba(42, 23, 127, 0.08);
+  background: rgba(var(--ux4g-primary-rgb), 0.08);
   outline: none;
 }
 
@@ -126,18 +58,17 @@
   justify-content: center;
   min-width: 116px;
   height: 40px;
-  padding: 0 1.2rem;
-  border-radius: 0.8rem;
-  background: linear-gradient(180deg, #452cd1 0%, #2d1a8b 100%);
-  color: #fff;
-  font-weight: 600;
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-md);
+  background-color: var(--ux4g-primary);
+  color: var(--color-text-on-primary);
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  box-shadow: 0 8px 18px rgba(43, 23, 128, 0.18);
 }
 
 .app-action-button:hover,
 .app-action-button:focus-visible {
-  background: linear-gradient(180deg, #3d27b6 0%, #271670 100%);
+  background-color: var(--ux4g-primary-hover);
   outline: none;
 }
 
@@ -154,17 +85,12 @@
     display: inline-flex;
   }
 
-  .app-brand {
-    flex: 1 1 auto;
-  }
-
   .app-mobile-menu {
     display: none;
     flex-direction: column;
-    padding: 0.75rem;
-    border-top: 1px solid rgba(39, 46, 64, 0.12);
-    background: rgba(255, 255, 255, 0.86);
-    backdrop-filter: blur(10px);
+    padding: var(--space-3);
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-surface);
   }
 
   .app-mobile-menu.is-open {
@@ -175,11 +101,12 @@
   .app-mobile-logout {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--space-3);
     width: 100%;
-    padding: 0.9rem 0.85rem;
-    border-radius: 0.75rem;
-    color: #2f3550;
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
     text-decoration: none;
     background: transparent;
     cursor: pointer;
@@ -190,13 +117,13 @@
   .app-mobile-link:focus-visible,
   .app-mobile-logout:hover,
   .app-mobile-logout:focus-visible {
-    background: rgba(42, 23, 127, 0.06);
+    background: rgba(var(--ux4g-primary-rgb), 0.06);
     outline: none;
   }
 
   .app-mobile-link--active {
-    color: #2b1780;
-    font-weight: 600;
+    color: var(--ux4g-primary);
+    font-weight: var(--font-weight-semibold);
   }
 
   .app-mobile-link-icon {
@@ -208,15 +135,7 @@
 
 @media (max-width: 620px) {
   .app-header-inner {
-    padding: 0 0.75rem 0 0.5rem;
-  }
-
-  .app-brand-copy {
-    display: none;
-  }
-
-  .app-brand-divider {
-    display: none;
+    padding: 0 var(--space-3) 0 var(--space-2);
   }
 
   .app-action-button {

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import "./ChoiceCard.css";
 
 interface ChoiceCardProps {
@@ -7,6 +8,7 @@ interface ChoiceCardProps {
   selected: boolean;
   onSelect: () => void;
   disabled?: boolean;
+  icon?: ReactNode;
 }
 
 export function ChoiceCard({
@@ -16,6 +18,7 @@ export function ChoiceCard({
   selected,
   onSelect,
   disabled,
+  icon,
 }: ChoiceCardProps) {
   return (
     <label
@@ -29,6 +32,11 @@ export function ChoiceCard({
         disabled={disabled}
         onChange={onSelect}
       />
+      {icon && (
+        <span className="choice-card-icon" aria-hidden="true">
+          {icon}
+        </span>
+      )}
       <span className="choice-card-radio" aria-hidden="true" />
       <span className="choice-card-text">
         <span className="choice-card-title">{title}</span>

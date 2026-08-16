@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField } from "../../components/ui/TextField";
 import { SelectField } from "../../components/ui/SelectField";
@@ -96,16 +97,6 @@ export function CapOptionPage() {
 
   return (
     <div className="app-form-page cap-page">
-      <div className="app-form-topbar">
-        <div>CAP Option (Part II) &mdash; Junior College Preferences</div>
-        <span
-          className={`app-form-status ${locked ? "app-form-status--locked" : ""}`}
-        >
-          <span className="app-form-status-dot" />
-          {locked ? "Locked" : "In Progress"}
-        </span>
-      </div>
-
       <div className="app-form-stepper-wrap">
         <ol className="app-form-stepper cap-stepper">
           {STEPS.map((label, index) => {
@@ -287,6 +278,7 @@ function StreamMediumStep({
             key={option}
             name="stream"
             title={option}
+            icon={STREAM_ICONS[option]}
             selected={stream === option}
             onSelect={() => setStream(option)}
           />
@@ -339,7 +331,7 @@ function SearchAndRankStep({
   const [search, setSearch] = useState("");
   const [district, setDistrict] = useState("All Districts");
   const [status, setStatus] = useState("All Types");
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
   const [detailsCollege, setDetailsCollege] = useState<JuniorCollege | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -409,39 +401,26 @@ function SearchAndRankStep({
         </button>
       </div>
 
-      {/* Section 1: Selected Colleges cart */}
-      <div className="cap-cart" id={CART_SECTION_ID}>
-        <div className="cap-cart-header">
-          <h2 className="cap-cart-title">Selected Colleges</h2>
-          <div className="cap-cart-header-right">
-            <span className="cap-cart-counter">
-              {preferences.length} / {MAX_PREFERENCES} Colleges Selected
-            </span>
-            {readyToRank && (
-              <button
-                type="button"
-                className="cap-set-prefs-cta"
-                onClick={scrollToPreferences}
-              >
-                Set Preferences &rarr;
-              </button>
-            )}
+      {/* Section 1: Selected Colleges cart - appears once the first college is added */}
+      {preferences.length > 0 && (
+        <div className="cap-cart" id={CART_SECTION_ID}>
+          <div className="cap-cart-header">
+            <h2 className="cap-cart-title">Selected Colleges</h2>
+            <div className="cap-cart-header-right">
+              <span className="cap-cart-counter">
+                {preferences.length} / {MAX_PREFERENCES} Colleges Selected
+              </span>
+              {readyToRank && (
+                <button
+                  type="button"
+                  className="cap-set-prefs-cta"
+                  onClick={scrollToPreferences}
+                >
+                  Set Preferences &rarr;
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="cap-limit-bar-track cap-cart-track">
-          <div
-            className="cap-limit-bar-fill"
-            style={{
-              width: `${Math.min(100, (preferences.length / MAX_PREFERENCES) * 100)}%`,
-            }}
-          />
-        </div>
-        {preferences.length === 0 ? (
-          <p className="cap-cart-empty">
-            No colleges selected yet. Use the search below to find and add
-            colleges.
-          </p>
-        ) : (
           <ul className="cap-cart-list">
             {preferences.map((college) => (
               <li key={college.id} className="cap-cart-chip">
@@ -457,8 +436,8 @@ function SearchAndRankStep({
               </li>
             ))}
           </ul>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Section 2: Find Your College search & filters */}
       <div className="cap-search-panel">
@@ -471,47 +450,21 @@ function SearchAndRankStep({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button
-            type="button"
-            className={`cap-filters-btn ${filtersOpen ? "cap-filters-btn--open" : ""}`}
-            onClick={() => setFiltersOpen((open) => !open)}
-          >
-            <FilterIcon />
-            Filters
-            {activeFilterCount > 0 && (
-              <span className="cap-filters-count">{activeFilterCount}</span>
-            )}
-          </button>
+          <SelectField
+            className="ux4g-field--tight cap-search-input"
+            label="District"
+            options={["All Districts", ...DISTRICT_OPTIONS]}
+            value={district}
+            onChange={(e) => setDistrict(e.target.value)}
+          />
+          <SelectField
+            className="ux4g-field--tight cap-search-input"
+            label="College Type"
+            options={["All Types", ...STATUS_OPTIONS]}
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          />
         </div>
-
-        {filtersOpen && (
-          <div className="cap-filters-drawer">
-            <SelectField
-              className="ux4g-field--tight"
-              label="District"
-              options={["All Districts", ...DISTRICT_OPTIONS]}
-              value={district}
-              onChange={(e) => setDistrict(e.target.value)}
-            />
-            <SelectField
-              className="ux4g-field--tight"
-              label="College Type"
-              options={["All Types", ...STATUS_OPTIONS]}
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            />
-            <button
-              type="button"
-              className="app-form-inline-link cap-filters-clear"
-              onClick={() => {
-                setDistrict("All Districts");
-                setStatus("All Types");
-              }}
-            >
-              Clear Filters
-            </button>
-          </div>
-        )}
 
         {activeFilterCount > 0 && (
           <div className="cap-filter-chip-row">
@@ -550,68 +503,165 @@ function SearchAndRankStep({
       <div className="cap-available-section">
         <div className="cap-available-header">
           <h2 className="app-form-section-title cap-available-title">Available Colleges</h2>
-          <span className="cap-available-count">{results.length} colleges found</span>
+          <div className="cap-available-header-right">
+            <span className="cap-available-count">{results.length} colleges found</span>
+            <div className="cap-view-toggle" role="group" aria-label="Change results layout">
+              <button
+                type="button"
+                className={`cap-view-toggle-btn ${viewMode === "cards" ? "cap-view-toggle-btn--active" : ""}`}
+                aria-pressed={viewMode === "cards"}
+                aria-label="Show as cards"
+                onClick={() => setViewMode("cards")}
+              >
+                <GridIcon />
+              </button>
+              <button
+                type="button"
+                className={`cap-view-toggle-btn ${viewMode === "table" ? "cap-view-toggle-btn--active" : ""}`}
+                aria-pressed={viewMode === "table"}
+                aria-label="Show as table"
+                onClick={() => setViewMode("table")}
+              >
+                <TableIcon />
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div className="cap-college-grid">
-          {results.length === 0 && (
-            <p className="cap-empty-note">
-              No colleges match {stream} / {medium}
-              {district !== "All Districts" ? ` in ${district}` : ""}
-              {status !== "All Types" ? ` (${status})` : ""}
-              {search.trim() ? ` for "${search.trim()}"` : ""}. Try adjusting
-              your filters.
-            </p>
-          )}
-          {results.map((college) => {
-            const isSelected = selectedIds.has(college.id);
-            const disableAdd = !isSelected && atLimit;
-            return (
-              <div key={college.id} className="cap-college-card">
-                <p className="cap-college-name">{college.name}</p>
-                <p className="cap-college-address">{college.address}</p>
-                <div className="cap-college-meta">
-                  <span>{college.choiceCode}</span>
-                  <span>{college.district}</span>
-                  <span>{college.status}</span>
-                  <span>
-                    {college.fees > 0
-                      ? `₹${college.fees.toLocaleString("en-IN")} / yr`
-                      : "No Fees"}
-                  </span>
+        {results.length === 0 && (
+          <p className="cap-empty-note">
+            No colleges match {stream} / {medium}
+            {district !== "All Districts" ? ` in ${district}` : ""}
+            {status !== "All Types" ? ` (${status})` : ""}
+            {search.trim() ? ` for "${search.trim()}"` : ""}. Try adjusting
+            your filters.
+          </p>
+        )}
+
+        {results.length > 0 && viewMode === "cards" && (
+          <div className="cap-college-grid">
+            {results.map((college) => {
+              const isSelected = selectedIds.has(college.id);
+              const disableAdd = !isSelected && atLimit;
+              return (
+                <div key={college.id} className="cap-college-card">
+                  <p className="cap-college-name">{college.name}</p>
+                  <p className="cap-college-address">{college.address}</p>
+                  <div className="cap-college-meta">
+                    <span>{college.choiceCode}</span>
+                    <span>{college.district}</span>
+                    <span>{college.status}</span>
+                    <span>
+                      {college.fees > 0
+                        ? `₹${college.fees.toLocaleString("en-IN")} / yr`
+                        : "No Fees"}
+                    </span>
+                  </div>
+                  <div className="cap-college-card-actions">
+                    <Button
+                      variant="secondary"
+                      className="cap-college-view-btn"
+                      onClick={() => setDetailsCollege(college)}
+                    >
+                      View Details
+                    </Button>
+                    <Button
+                      variant={isSelected ? "secondary" : "primary"}
+                      className="cap-college-add-btn"
+                      disabled={isSelected || disableAdd}
+                      onClick={() => addCollege(college)}
+                    >
+                      {isSelected ? "Added ✓" : disableAdd ? "Limit Reached" : "Add to Preferences"}
+                    </Button>
+                  </div>
                 </div>
-                <div className="cap-college-card-actions">
-                  <Button
-                    variant="secondary"
-                    className="cap-college-view-btn"
-                    onClick={() => setDetailsCollege(college)}
-                  >
-                    View Details
-                  </Button>
-                  <Button
-                    variant={isSelected ? "secondary" : "primary"}
-                    className="cap-college-add-btn"
-                    disabled={isSelected || disableAdd}
-                    onClick={() => addCollege(college)}
-                  >
-                    {isSelected ? "Added ✓" : disableAdd ? "Limit Reached" : "Add to Preferences"}
-                  </Button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
+
+        {results.length > 0 && viewMode === "table" && (
+          <div className="cap-table-wrap">
+            <table className="cap-table cap-available-table">
+              <thead>
+                <tr>
+                  <th>College Name</th>
+                  <th>Code</th>
+                  <th>District</th>
+                  <th>Type</th>
+                  <th>Fees</th>
+                  <th className="cap-table-actions-col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {results.map((college) => {
+                  const isSelected = selectedIds.has(college.id);
+                  const disableAdd = !isSelected && atLimit;
+                  return (
+                    <tr key={college.id}>
+                      <td>
+                        <p className="cap-table-college-name">{college.name}</p>
+                        <p className="cap-table-college-address">{college.address}</p>
+                      </td>
+                      <td className="cap-table-mono">{college.choiceCode}</td>
+                      <td>{college.district}</td>
+                      <td>{college.status}</td>
+                      <td>
+                        {college.fees > 0
+                          ? `₹${college.fees.toLocaleString("en-IN")}`
+                          : "No Fees"}
+                      </td>
+                      <td>
+                        <div className="cap-table-row-actions">
+                          <Button
+                            variant="secondary"
+                            className="cap-college-view-btn"
+                            onClick={() => setDetailsCollege(college)}
+                          >
+                            View
+                          </Button>
+                          <Button
+                            variant={isSelected ? "secondary" : "primary"}
+                            className="cap-college-add-btn"
+                            disabled={isSelected || disableAdd}
+                            onClick={() => addCollege(college)}
+                          >
+                            {isSelected ? "Added ✓" : disableAdd ? "Limit Reached" : "Add"}
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Preference ordering unlocks once the cart is full */}
       {readyToRank ? (
         <div id={PREFERENCES_SECTION_ID} className="cap-preferences-section">
-          <h2 className="app-form-section-title">Set Your Preferences</h2>
+          <h2 className="app-form-section-title">My College Preference Ranking</h2>
           <p className="app-form-step-sub">
-            Drag colleges to reorder, or use the arrow buttons. Priority 1 is
-            your most preferred college and will be considered first during
-            CAP allotment.
+            Arrange your colleges from most preferred to least preferred.
           </p>
+          <div className="cap-priority-explainer">
+            <span className="cap-priority-explainer-item">
+              <span className="cap-priority-explainer-badge">1</span>
+              First Choice
+            </span>
+            <ArrowRightIcon />
+            <span className="cap-priority-explainer-item">
+              <span className="cap-priority-explainer-badge cap-priority-explainer-badge--muted">
+                {MAX_PREFERENCES}
+              </span>
+              Last Choice
+            </span>
+            <span className="cap-priority-explainer-hint">
+              <ArrowUpIcon /> Move a college up = higher preference
+            </span>
+          </div>
           <ol className="cap-rank-list cap-rank-list--scroll">
             {preferences.map((college, index) => (
               <li
@@ -639,8 +689,15 @@ function SearchAndRankStep({
                 <span className="cap-drag-handle" aria-hidden="true">
                   <DragHandleIcon />
                 </span>
-                <span className="cap-priority-badge">{index + 1}</span>
+                <span
+                  className={`cap-priority-badge ${index === 0 ? "cap-priority-badge--first" : ""}`}
+                >
+                  {index + 1}
+                </span>
                 <div className="cap-rank-row-main">
+                  {index === 0 && (
+                    <span className="cap-first-choice-tag">★ First Choice</span>
+                  )}
                   <p className="cap-college-name">{college.name}</p>
                   <p className="cap-college-address">{college.address}</p>
                   <div className="cap-college-meta">
@@ -1020,10 +1077,82 @@ function CloseIcon() {
   );
 }
 
-function FilterIcon() {
+function ArrowRightIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M4 6h16M7 12h10M10 18h4" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
+
+function ArrowUpIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+      <path d="M12 19V5M6 11l6-6 6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function GridIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3.5" y="3.5" width="7" height="7" rx="1.5" />
+      <rect x="13.5" y="3.5" width="7" height="7" rx="1.5" />
+      <rect x="3.5" y="13.5" width="7" height="7" rx="1.5" />
+      <rect x="13.5" y="13.5" width="7" height="7" rx="1.5" />
+    </svg>
+  );
+}
+
+function TableIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3.5" y="4.5" width="17" height="15" rx="1.5" />
+      <path d="M3.5 9.5h17M9 4.5v15" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ArtsIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path
+        d="M12 3c-4.97 0-9 3.69-9 8.25 0 2.9 2.24 3.75 3.75 3.75.83 0 1.5.67 1.5 1.5S7.58 18 6.75 18a.75.75 0 0 0 0 1.5c1.79 1.5 3.98 1.5 5.25.5 3.31 0 8-3.02 8-8.75C20 6.69 16.97 3 12 3Z"
+        strokeLinejoin="round"
+      />
+      <circle cx="8.2" cy="9.5" r="1" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none" />
+      <circle cx="15.5" cy="9.5" r="1" fill="currentColor" stroke="none" />
+      <circle cx="16.2" cy="13" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function CommerceIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <rect x="3.5" y="8" width="17" height="12" rx="1.5" />
+      <path d="M8 8V6.5A2.5 2.5 0 0 1 10.5 4h3A2.5 2.5 0 0 1 16 6.5V8" strokeLinecap="round" />
+      <path d="M3.5 13h17" />
+    </svg>
+  );
+}
+
+function ScienceIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path
+        d="M10 3h4M9.5 3v6.2L5.6 16.9A2 2 0 0 0 7.4 20h9.2a2 2 0 0 0 1.8-3.1L14.5 9.2V3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M7.5 15h9" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+const STREAM_ICONS: Record<string, ReactNode> = {
+  Arts: <ArtsIcon />,
+  Commerce: <CommerceIcon />,
+  Science: <ScienceIcon />,
+};

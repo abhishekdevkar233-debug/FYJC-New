@@ -182,14 +182,6 @@ export function DashboardPage() {
                   </>
                 )}
               </span>
-              <button
-                type="button"
-                className={`dashboard-choice-btn ${form.tag === "done" ? "dashboard-choice-btn--done" : "dashboard-choice-btn--pending"}`}
-                onClick={() => navigate(form.to)}
-              >
-                {form.actionLabel}
-                <ChevronRightIcon />
-              </button>
             </div>
           ))}
         </div>
