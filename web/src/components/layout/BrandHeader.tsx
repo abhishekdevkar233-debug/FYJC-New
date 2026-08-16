@@ -3,15 +3,17 @@ import type { ReactNode } from "react";
 import logo1 from "../../assets/logo-1.svg";
 import logo2 from "../../assets/logo-2.svg";
 import logoDivider from "../../assets/logo-divider.svg";
+import { useLanguage } from "../../context/LanguageContext";
+import type { AppLanguage } from "../../context/LanguageContext";
 import "./BrandHeader.css";
 
-const LANGUAGES = ["EN", "HI", "MR"];
+const LANGUAGES: AppLanguage[] = ["EN", "HI", "MR"];
 const MIN_SCALE = 87.5;
 const MAX_SCALE = 125;
 const SCALE_STEP = 12.5;
 
 export function BrandHeader({ children }: { children?: ReactNode }) {
-  const [language, setLanguage] = useState("EN");
+  const { language, setLanguage } = useLanguage();
   const [scale, setScale] = useState(100);
   const [highContrast, setHighContrast] = useState(false);
 

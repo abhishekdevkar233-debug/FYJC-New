@@ -21,59 +21,62 @@ import { PaymentGatewayPage } from "./pages/PaymentGateway/PaymentGatewayPage";
 import { ApplicationFormProvider } from "./context/ApplicationFormContext";
 import { CapOptionProvider } from "./context/CapOptionContext";
 import { QuotaProvider } from "./context/QuotaContext";
+import { LanguageProvider } from "./context/LanguageContext";
 
 function App() {
   return (
-    <ApplicationFormProvider>
-      <CapOptionProvider>
-        <QuotaProvider>
-          <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/payment-gateway" element={<PaymentGatewayPage />} />
-            <Route element={<AppShell />}>
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route
-                path="/application-form"
-                element={<ApplicationFormPage />}
-              />
-              <Route path="/cap-option" element={<CapOptionPage />} />
-              <Route path="/quota" element={<Navigate to="/quota/in-house" replace />} />
-              <Route path="/quota/in-house" element={<InHouseQuotaPage />} />
-              <Route path="/quota/minority" element={<MinorityQuotaPage />} />
-              <Route path="/quota/management" element={<ManagementQuotaPage />} />
-              <Route path="/quota/documents" element={<QuotaDocumentsPage />} />
-              <Route path="/quota/timeline" element={<QuotaTimelinePage />} />
-              <Route
-                path="/miscellaneous"
-                element={<Navigate to="/miscellaneous/payment-history" replace />}
-              />
-              <Route
-                path="/miscellaneous/payment-history"
-                element={<PaymentHistoryPage />}
-              />
-              <Route path="/miscellaneous/grievance" element={<GrievancePage />} />
-              <Route
-                path="/miscellaneous/withdraw-application"
-                element={<WithdrawApplicationPage />}
-              />
-              <Route
-                path="/cap-admission"
-                element={<Navigate to="/cap-admission/status" replace />}
-              />
-              <Route
-                path="/cap-admission/status"
-                element={<CapAllotmentStatusPage />}
-              />
-              <Route
-                path="/cap-admission/summary"
-                element={<CapAdmissionSummaryPage />}
-              />
-              <Route path="/whatsapp" element={<WhatsAppPrototypePage />} />
-            </Route>
-          </Routes>
-        </QuotaProvider>
-      </CapOptionProvider>
-    </ApplicationFormProvider>
+    <LanguageProvider>
+      <ApplicationFormProvider>
+        <CapOptionProvider>
+          <QuotaProvider>
+            <Routes>
+              <Route path="/" element={<LoginPage />} />
+              <Route path="/payment-gateway" element={<PaymentGatewayPage />} />
+              <Route element={<AppShell />}>
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route
+                  path="/application-form"
+                  element={<ApplicationFormPage />}
+                />
+                <Route path="/cap-option" element={<CapOptionPage />} />
+                <Route path="/quota" element={<Navigate to="/quota/in-house" replace />} />
+                <Route path="/quota/in-house" element={<InHouseQuotaPage />} />
+                <Route path="/quota/minority" element={<MinorityQuotaPage />} />
+                <Route path="/quota/management" element={<ManagementQuotaPage />} />
+                <Route path="/quota/documents" element={<QuotaDocumentsPage />} />
+                <Route path="/quota/timeline" element={<QuotaTimelinePage />} />
+                <Route
+                  path="/miscellaneous"
+                  element={<Navigate to="/miscellaneous/payment-history" replace />}
+                />
+                <Route
+                  path="/miscellaneous/payment-history"
+                  element={<PaymentHistoryPage />}
+                />
+                <Route path="/miscellaneous/grievance" element={<GrievancePage />} />
+                <Route
+                  path="/miscellaneous/withdraw-application"
+                  element={<WithdrawApplicationPage />}
+                />
+                <Route
+                  path="/cap-admission"
+                  element={<Navigate to="/cap-admission/status" replace />}
+                />
+                <Route
+                  path="/cap-admission/status"
+                  element={<CapAllotmentStatusPage />}
+                />
+                <Route
+                  path="/cap-admission/summary"
+                  element={<CapAdmissionSummaryPage />}
+                />
+                <Route path="/whatsapp" element={<WhatsAppPrototypePage />} />
+              </Route>
+            </Routes>
+          </QuotaProvider>
+        </CapOptionProvider>
+      </ApplicationFormProvider>
+    </LanguageProvider>
   );
 }
 

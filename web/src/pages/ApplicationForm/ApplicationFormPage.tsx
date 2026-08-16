@@ -7,12 +7,15 @@ import { ChoiceCard } from "../../components/ui/ChoiceCard";
 import { Button } from "../../components/ui/Button";
 import { Toast } from "../../components/ui/Toast";
 import {
+  APPLICATION_LOCKED_VOICEOVER,
   APPLICATION_STEPS,
   APPLICATION_STEP_VOICEOVERS,
   PAYMENT_AMOUNT,
+  RECEIPT_READY_VOICEOVER,
 } from "../../lib/applicationDraft";
-import { speak } from "../../lib/speech";
+import { speak, SPEECH_LOCALE } from "../../lib/speech";
 import { useApplicationForm } from "../../context/ApplicationFormContext";
+import { useLanguage } from "../../context/LanguageContext";
 import type {
   RegistrationData,
   PersonalData,
@@ -73,6 +76,9 @@ export function ApplicationFormPage() {
     setDocuments,
     payment,
   } = useApplicationForm();
+  const { language } = useLanguage();
+  const voiceoverLangKey = language === "MR" ? "MR" : "EN";
+  const voiceoverLocale = language === "MR" ? SPEECH_LOCALE.MR : SPEECH_LOCALE.EN;
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("Application saved successfully");
 
@@ -93,9 +99,9 @@ export function ApplicationFormPage() {
     lastSpokenStep.current = current;
     const line =
       current === 4 && payment.status === "success"
-        ? "Payment done successfully. You can download or print your receipt."
-        : APPLICATION_STEP_VOICEOVERS[current];
-    if (line) speak(line);
+        ? RECEIPT_READY_VOICEOVER[voiceoverLangKey]
+        : APPLICATION_STEP_VOICEOVERS[voiceoverLangKey][current];
+    if (line) speak(line, voiceoverLocale);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current]);
 
@@ -129,7 +135,7 @@ export function ApplicationFormPage() {
     setCompleted((prev) => new Set(prev).add(current));
     setLocked(true);
     showToast("Application locked successfully");
-    speak("Application locked successfully.");
+    speak(APPLICATION_LOCKED_VOICEOVER[voiceoverLangKey], voiceoverLocale);
   }
 
   function updateMark(index: number, field: keyof SubjectMark, value: string) {

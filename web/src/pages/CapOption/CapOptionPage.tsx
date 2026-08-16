@@ -19,7 +19,7 @@ import "./CapOptionPage.css";
 
 const STEPS = ["Choose Stream & Medium", "Rank Your Preferences", "Review & Lock"];
 const STATUS_OPTIONS = ["Self Financed", "Aided", "Government"];
-const RESULTS_PER_PAGE = 9;
+const RESULTS_PER_PAGE = 10;
 const CART_SECTION_ID = "cap-selected-colleges-cart";
 const PREFERENCES_SECTION_ID = "cap-set-preferences-section";
 
@@ -45,6 +45,8 @@ export function CapOptionPage() {
   } = useCapOption();
   const [toastVisible, setToastVisible] = useState(false);
   const [incompleteModalOpen, setIncompleteModalOpen] = useState(false);
+  const [confirmChecked, setConfirmChecked] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   function canAccessStep(index: number) {
     if (index === 0) return true;
@@ -189,10 +191,8 @@ export function CapOptionPage() {
               medium={medium}
               preferences={preferences}
               locked={locked}
-              onLock={() => {
-                lockPreferences();
-                showToast("Preferences locked successfully");
-              }}
+              confirmChecked={confirmChecked}
+              setConfirmChecked={setConfirmChecked}
               onEditStreamMedium={() => goTo(0)}
               onEditColleges={() => goTo(1)}
             />
@@ -208,9 +208,16 @@ export function CapOptionPage() {
                 <span />
               )}
               <div className="app-form-footer-right">
-                {current < STEPS.length - 1 && (
+                {current < STEPS.length - 1 ? (
                   <Button onClick={handleNext} disabled={nextDisabled}>
                     Next &rarr;
+                  </Button>
+                ) : (
+                  <Button
+                    disabled={!confirmChecked}
+                    onClick={() => setConfirmOpen(true)}
+                  >
+                    Lock Preferences
                   </Button>
                 )}
               </div>
@@ -247,6 +254,34 @@ export function CapOptionPage() {
                 Continue Anyway
               </Button>
               <Button onClick={scrollToSelection}>Set Preferences</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmOpen && (
+        <div className="cap-modal-overlay" role="dialog" aria-modal="true">
+          <div className="cap-modal">
+            <h3>Lock your preferences?</h3>
+            <p>
+              You are about to lock {preferences.length} college
+              {preferences.length === 1 ? "" : "s"} in the order shown. Your
+              preferences may not be editable after this and this action
+              cannot be undone for the current CAP round.
+            </p>
+            <div className="cap-modal-actions">
+              <Button variant="secondary" onClick={() => setConfirmOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  setConfirmOpen(false);
+                  lockPreferences();
+                  showToast("Preferences locked successfully");
+                }}
+              >
+                Yes, Lock My Preferences
+              </Button>
             </div>
           </div>
         </div>
@@ -332,7 +367,7 @@ function SearchAndRankStep({
   const [search, setSearch] = useState("");
   const [district, setDistrict] = useState("All Districts");
   const [status, setStatus] = useState("All Types");
-  const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+  const [viewMode, setViewMode] = useState<"cards" | "table">("table");
   const [page, setPage] = useState(1);
   const [detailsCollege, setDetailsCollege] = useState<JuniorCollege | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
@@ -697,82 +732,100 @@ function SearchAndRankStep({
           <p className="app-form-step-sub">
             Arrange your colleges from most preferred to least preferred.
           </p>
-          <ol className="cap-rank-list cap-rank-list--scroll">
-            {preferences.map((college, index) => (
-              <li
-                key={college.id}
-                className={`cap-rank-row ${dragIndex === index ? "cap-rank-row--dragging" : ""} ${dragOverIndex === index && dragIndex !== null && dragIndex !== index ? "cap-rank-row--drag-over" : ""}`}
-                draggable
-                onDragStart={() => setDragIndex(index)}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  if (dragIndex !== null && dragIndex !== index) {
-                    setDragOverIndex(index);
-                  }
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  if (dragIndex !== null) reorder(dragIndex, index);
-                  setDragIndex(null);
-                  setDragOverIndex(null);
-                }}
-                onDragEnd={() => {
-                  setDragIndex(null);
-                  setDragOverIndex(null);
-                }}
-              >
-                <span className="cap-drag-handle" aria-hidden="true">
-                  <DragHandleIcon />
-                </span>
-                <span
-                  className={`cap-priority-badge ${index === 0 ? "cap-priority-badge--first" : ""}`}
-                >
-                  {index + 1}
-                </span>
-                <div className="cap-rank-row-main">
-                  {index === 0 && (
-                    <span className="cap-first-choice-tag">★ First Choice</span>
-                  )}
-                  <p className="cap-college-name">{college.name}</p>
-                  <p className="cap-college-address">{college.address}</p>
-                  <div className="cap-college-meta">
-                    <span>{college.choiceCode}</span>
-                    <span>{college.district}</span>
-                    <span>{college.medium}</span>
-                    <span>{college.status}</span>
-                  </div>
-                </div>
-                <div className="cap-rank-row-actions">
-                  <button
-                    type="button"
-                    className="cap-icon-btn"
-                    aria-label={`Move ${college.name} up`}
-                    disabled={index === 0}
-                    onClick={() => moveUp(index)}
+          <div className="cap-table-wrap">
+            <table className="cap-table cap-rank-table">
+              <thead>
+                <tr>
+                  <th className="cap-table-priority-col">Pref No.</th>
+                  <th>Choice Code</th>
+                  <th>College Name</th>
+                  <th>District</th>
+                  <th>Block / Taluka</th>
+                  <th>Stream</th>
+                  <th>Medium</th>
+                  <th className="cap-table-actions-col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {preferences.map((college, index) => (
+                  <tr
+                    key={college.id}
+                    className={`cap-rank-table-row ${dragIndex === index ? "cap-rank-row--dragging" : ""} ${dragOverIndex === index && dragIndex !== null && dragIndex !== index ? "cap-rank-row--drag-over" : ""}`}
+                    draggable
+                    onDragStart={() => setDragIndex(index)}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      if (dragIndex !== null && dragIndex !== index) {
+                        setDragOverIndex(index);
+                      }
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      if (dragIndex !== null) reorder(dragIndex, index);
+                      setDragIndex(null);
+                      setDragOverIndex(null);
+                    }}
+                    onDragEnd={() => {
+                      setDragIndex(null);
+                      setDragOverIndex(null);
+                    }}
                   >
-                    <ChevronUpIcon />
-                  </button>
-                  <button
-                    type="button"
-                    className="cap-icon-btn"
-                    aria-label={`Move ${college.name} down`}
-                    disabled={index === preferences.length - 1}
-                    onClick={() => moveDown(index)}
-                  >
-                    <ChevronDownIcon />
-                  </button>
-                  <button
-                    type="button"
-                    className="cap-icon-btn cap-icon-btn--danger"
-                    aria-label={`Remove ${college.name}`}
-                    onClick={() => removeCollege(college.id)}
-                  >
-                    <TrashIcon />
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ol>
+                    <td className="cap-table-priority-col">
+                      <span className="cap-drag-handle" aria-hidden="true">
+                        <DragHandleIcon />
+                      </span>
+                      <span
+                        className={`cap-priority-badge ${index === 0 ? "cap-priority-badge--first" : ""}`}
+                      >
+                        {index + 1}
+                      </span>
+                    </td>
+                    <td className="cap-table-mono">{college.choiceCode}</td>
+                    <td>
+                      {index === 0 && (
+                        <span className="cap-first-choice-tag">★ First Choice</span>
+                      )}
+                      <p className="cap-table-college-name">{college.name}</p>
+                    </td>
+                    <td>{college.district}</td>
+                    <td>{college.taluka}</td>
+                    <td>{college.stream}</td>
+                    <td>{college.medium}</td>
+                    <td>
+                      <div className="cap-rank-row-actions">
+                        <button
+                          type="button"
+                          className="cap-icon-btn"
+                          aria-label={`Move ${college.name} up`}
+                          disabled={index === 0}
+                          onClick={() => moveUp(index)}
+                        >
+                          <ChevronUpIcon />
+                        </button>
+                        <button
+                          type="button"
+                          className="cap-icon-btn"
+                          aria-label={`Move ${college.name} down`}
+                          disabled={index === preferences.length - 1}
+                          onClick={() => moveDown(index)}
+                        >
+                          <ChevronDownIcon />
+                        </button>
+                        <button
+                          type="button"
+                          className="cap-icon-btn cap-icon-btn--danger"
+                          aria-label={`Remove ${college.name}`}
+                          onClick={() => removeCollege(college.id)}
+                        >
+                          <TrashIcon />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : (
         preferences.length > 0 && (
@@ -864,7 +917,8 @@ function ReviewStep({
   medium,
   preferences,
   locked,
-  onLock,
+  confirmChecked,
+  setConfirmChecked,
   onEditStreamMedium,
   onEditColleges,
 }: {
@@ -872,13 +926,11 @@ function ReviewStep({
   medium: string;
   preferences: JuniorCollege[];
   locked: boolean;
-  onLock: () => void;
+  confirmChecked: boolean;
+  setConfirmChecked: (value: boolean) => void;
   onEditStreamMedium: () => void;
   onEditColleges: () => void;
 }) {
-  const [confirmChecked, setConfirmChecked] = useState(false);
-  const [confirmOpen, setConfirmOpen] = useState(false);
-
   if (locked) {
     return (
       <div className="app-form-section">
@@ -936,7 +988,7 @@ function ReviewStep({
       <PreferenceTable preferences={preferences} />
 
       <div className="cap-confirm-section">
-        <div className="app-form-callout cap-callout--warn">
+        <div className="app-form-callout app-form-callout--declaration">
           <InfoIcon />
           <span>
             Please review all your details carefully before locking your
@@ -954,42 +1006,7 @@ function ReviewStep({
           I have reviewed and confirmed that all the information and college
           preferences are correct.
         </label>
-
-        <Button
-          className="cap-lock-btn"
-          disabled={!confirmChecked}
-          onClick={() => setConfirmOpen(true)}
-        >
-          Lock Preferences
-        </Button>
       </div>
-
-      {confirmOpen && (
-        <div className="cap-modal-overlay" role="dialog" aria-modal="true">
-          <div className="cap-modal">
-            <h3>Lock your preferences?</h3>
-            <p>
-              You are about to lock {preferences.length} college
-              {preferences.length === 1 ? "" : "s"} in the order shown. Your
-              preferences may not be editable after this and this action
-              cannot be undone for the current CAP round.
-            </p>
-            <div className="cap-modal-actions">
-              <Button variant="secondary" onClick={() => setConfirmOpen(false)}>
-                Cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  setConfirmOpen(false);
-                  onLock();
-                }}
-              >
-                Yes, Lock My Preferences
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
