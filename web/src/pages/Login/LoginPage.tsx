@@ -4,6 +4,7 @@ import { Button } from "../../components/ui/Button";
 import { TextField } from "../../components/ui/TextField";
 import { PasswordField } from "../../components/ui/PasswordField";
 import { CaptchaField, generateCode } from "../../components/ui/CaptchaField";
+import { BrandHeader } from "../../components/layout/BrandHeader";
 import "./LoginPage.css";
 
 interface FormErrors {
@@ -60,6 +61,8 @@ export function LoginPage() {
 
   return (
     <div className="login-page">
+      <BrandHeader />
+
       <main className="login-page-content">
         <section className="login-card" aria-labelledby="login-heading">
           <header className="login-card-header">

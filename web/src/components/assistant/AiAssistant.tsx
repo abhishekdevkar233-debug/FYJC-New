@@ -8,6 +8,7 @@ import {
   describeCurrentLocation,
   type AssistantAppState,
 } from "../../lib/assistantContext";
+import { pickFemaleVoice } from "../../lib/speech";
 import "./AiAssistant.css";
 
 interface ChatMessage {
@@ -25,15 +26,6 @@ const SUGGESTED_QUESTIONS = [
   "Summarize my application",
   "How does this step work?",
 ];
-
-function pickFemaleVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
-  const byKeyword = voices.find((v) => /female/i.test(v.name));
-  if (byKeyword) return byKeyword;
-  const byName = voices.find((v) =>
-    /zira|samantha|victoria|karen|moira|tessa|fiona|susan|google uk english female/i.test(v.name),
-  );
-  return byName ?? null;
-}
 
 export function AiAssistant() {
   const location = useLocation();

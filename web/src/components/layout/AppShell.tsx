@@ -4,6 +4,7 @@ import { useApplicationForm } from "../../context/ApplicationFormContext";
 import { useCapOption, MAX_PREFERENCES } from "../../context/CapOptionContext";
 import { useQuota } from "../../context/QuotaContext";
 import { AiAssistant } from "../assistant/AiAssistant";
+import { BrandHeader } from "./BrandHeader";
 import "./AppShell.css";
 
 interface LeafNavItem {
@@ -82,8 +83,6 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
-const LANGUAGES = ["EN", "HI", "MR"];
-
 export function AppShell() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -98,8 +97,6 @@ export function AppShell() {
     ).map((item) => item.key);
     return new Set(initiallyOpen);
   });
-  const [language, setLanguage] = useState("EN");
-
   const quotaSelectedCount =
     selections.inHouse.length + selections.minority.length + selections.management.length;
 
@@ -135,37 +132,21 @@ export function AppShell() {
 
   return (
     <div className="app-shell">
-      <header className="app-topnav">
-        <div className="app-topnav-actions">
-          <div className="app-topnav-lang" role="group" aria-label="Language">
-            {LANGUAGES.map((lang) => (
-              <button
-                key={lang}
-                type="button"
-                className={`app-topnav-lang-btn ${language === lang ? "app-topnav-lang-btn--active" : ""}`}
-                onClick={() => setLanguage(lang)}
-                aria-pressed={language === lang}
-              >
-                {lang}
-              </button>
-            ))}
-          </div>
+      <BrandHeader>
+        <button type="button" className="app-topnav-bell" aria-label="Notifications">
+          <BellIcon />
+        </button>
 
-          <button type="button" className="app-topnav-bell" aria-label="Notifications">
-            <BellIcon />
-          </button>
-
-          <div className="app-topnav-user">
-            <span className="app-topnav-avatar" aria-hidden="true">
-              {applicantInitials}
-            </span>
-            <span className="app-topnav-user-text">
-              <span className="app-topnav-user-name">{applicantName}</span>
-              <span className="app-topnav-user-role">Applicant</span>
-            </span>
-          </div>
+        <div className="app-topnav-user">
+          <span className="app-topnav-avatar" aria-hidden="true">
+            {applicantInitials}
+          </span>
+          <span className="app-topnav-user-text">
+            <span className="app-topnav-user-name">{applicantName}</span>
+            <span className="app-topnav-user-role">Applicant</span>
+          </span>
         </div>
-      </header>
+      </BrandHeader>
 
       <div className="app-body">
         <aside className="app-sidebar" aria-label="Section navigation">

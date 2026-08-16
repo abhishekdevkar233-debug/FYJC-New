@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
+import { speak } from "../lib/speech";
 
 export interface RegistrationData {
   schoolArea: "Within Maharashtra State" | "Outside Maharashtra State";
@@ -162,44 +163,6 @@ const DEFAULT_PAYMENT: PaymentData = {
   mode: null,
   date: null,
 };
-
-function pickFemaleVoice(
-  voices: SpeechSynthesisVoice[],
-): SpeechSynthesisVoice | null {
-  const byKeyword = voices.find((v) => /female/i.test(v.name));
-  if (byKeyword) return byKeyword;
-  const byName = voices.find((v) =>
-    /zira|samantha|victoria|karen|moira|tessa|fiona|susan|google uk english female/i.test(
-      v.name,
-    ),
-  );
-  return byName ?? null;
-}
-
-function speak(text: string) {
-  if (typeof window === "undefined" || !window.speechSynthesis) return;
-  const synth = window.speechSynthesis;
-  synth.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  const existingVoices = synth.getVoices();
-
-  if (existingVoices.length > 0) {
-    const voice = pickFemaleVoice(existingVoices);
-    if (voice) utterance.voice = voice;
-    synth.speak(utterance);
-  } else {
-    synth.addEventListener(
-      "voiceschanged",
-      () => {
-        const voice = pickFemaleVoice(synth.getVoices());
-        if (voice) utterance.voice = voice;
-        synth.speak(utterance);
-      },
-      { once: true },
-    );
-  }
-}
 
 interface ApplicationFormContextValue {
   current: number;

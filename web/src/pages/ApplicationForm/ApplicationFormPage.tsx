@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField } from "../../components/ui/TextField";
@@ -6,7 +6,12 @@ import { SelectField } from "../../components/ui/SelectField";
 import { ChoiceCard } from "../../components/ui/ChoiceCard";
 import { Button } from "../../components/ui/Button";
 import { Toast } from "../../components/ui/Toast";
-import { APPLICATION_STEPS, PAYMENT_AMOUNT } from "../../lib/applicationDraft";
+import {
+  APPLICATION_STEPS,
+  APPLICATION_STEP_VOICEOVERS,
+  PAYMENT_AMOUNT,
+} from "../../lib/applicationDraft";
+import { speak } from "../../lib/speech";
 import { useApplicationForm } from "../../context/ApplicationFormContext";
 import type {
   RegistrationData,
@@ -69,6 +74,7 @@ export function ApplicationFormPage() {
     payment,
   } = useApplicationForm();
   const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("Application saved successfully");
 
   const totalMarks = marks.reduce(
     (sum, row) => sum + (Number(row.marks) || 0),
@@ -81,18 +87,31 @@ export function ApplicationFormPage() {
   const meritOn500 =
     totalOutOf > 0 ? ((totalMarks / totalOutOf) * 500).toFixed(2) : "0.00";
 
+  const lastSpokenStep = useRef<number | null>(null);
+  useEffect(() => {
+    if (lastSpokenStep.current === current) return;
+    lastSpokenStep.current = current;
+    const line =
+      current === 4 && payment.status === "success"
+        ? "Payment done successfully. You can download or print your receipt."
+        : APPLICATION_STEP_VOICEOVERS[current];
+    if (line) speak(line);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current]);
+
   function goTo(index: number) {
     setCurrent(index);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function showSavedToast() {
+  function showToast(message: string) {
+    setToastMessage(message);
     setToastVisible(true);
     window.setTimeout(() => setToastVisible(false), 3000);
   }
 
   function handleSaveDraft() {
-    showSavedToast();
+    showToast("Application saved successfully");
   }
 
   function handleNext() {
@@ -109,6 +128,8 @@ export function ApplicationFormPage() {
   function handleLock() {
     setCompleted((prev) => new Set(prev).add(current));
     setLocked(true);
+    showToast("Application locked successfully");
+    speak("Application locked successfully.");
   }
 
   function updateMark(index: number, field: keyof SubjectMark, value: string) {
@@ -367,7 +388,7 @@ export function ApplicationFormPage() {
         )}
       </div>
 
-      <Toast message="Application saved successfully" visible={toastVisible} />
+      <Toast message={toastMessage} visible={toastVisible} />
     </div>
   );
 }
