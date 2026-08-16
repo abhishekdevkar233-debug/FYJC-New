@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField } from "../../components/ui/TextField";
 import { SelectField } from "../../components/ui/SelectField";
@@ -117,10 +118,37 @@ export function ApplicationFormPage() {
     );
   }
 
-  function handleFileChosen(index: number, fileName: string | undefined) {
-    if (!fileName) return;
+  function handleFileChosen(index: number, file: File | undefined) {
+    if (!file) return;
+    const sizeKb = Math.max(1, Math.round(file.size / 1024));
+    const uploadedAt = new Date().toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     setDocuments((prev) =>
-      prev.map((doc, i) => (i === index ? { ...doc, fileName } : doc)),
+      prev.map((doc, i) =>
+        i === index
+          ? {
+              ...doc,
+              fileName: file.name,
+              fileSize: `${sizeKb} KB`,
+              uploadedAt,
+            }
+          : doc,
+      ),
+    );
+  }
+
+  function handleFileRemoved(index: number) {
+    setDocuments((prev) =>
+      prev.map((doc, i) =>
+        i === index
+          ? { ...doc, fileName: null, fileSize: null, uploadedAt: null }
+          : doc,
+      ),
     );
   }
 
@@ -183,12 +211,14 @@ export function ApplicationFormPage() {
 
       <div className="app-form-shell">
         <div className="app-form-card">
-          <div className="app-form-card-head">
-            <h1>{STEPS[current]}</h1>
-            <span className="app-form-step-count">
-              STEP {String(current + 1).padStart(2, "0")} / {STEPS.length}
-            </span>
-          </div>
+          {current !== 4 && (
+            <div className="app-form-card-head">
+              <h1>{STEPS[current]}</h1>
+              <span className="app-form-step-count">
+                STEP {String(current + 1).padStart(2, "0")} / {STEPS.length}
+              </span>
+            </div>
+          )}
 
           {current === 0 && (
             <RegistrationStep data={registration} onChange={setRegistration} />
@@ -218,6 +248,9 @@ export function ApplicationFormPage() {
             <DocumentsStep
               documents={documents}
               onFileChosen={handleFileChosen}
+              onFileRemoved={handleFileRemoved}
+              stepNumber={current + 1}
+              totalSteps={STEPS.length}
             />
           )}
           {current === 5 && (
@@ -228,13 +261,19 @@ export function ApplicationFormPage() {
           )}
           {current === 6 && (
             <LockStep
-              applicantName={personal.fullName}
-              board={registration.board}
-              category={category.admissionCategory}
-              merit={meritOn500}
-              documentsUploaded={documents.filter((d) => d.fileName).length}
+              registration={registration}
+              personal={personal}
+              category={category}
+              marks={marks}
+              totalMarks={totalMarks}
+              totalOutOf={totalOutOf}
+              meritOn500={meritOn500}
+              passingStatus={passingStatus}
+              passedEnglish={passedEnglish}
+              passedScience={passedScience}
+              documents={documents}
+              payment={payment}
               locked={locked}
-              paymentStatus={payment.status}
             />
           )}
 
@@ -885,41 +924,277 @@ function QualificationStep({
 function DocumentsStep({
   documents,
   onFileChosen,
+  onFileRemoved,
+  stepNumber,
+  totalSteps,
 }: {
   documents: DocumentRow[];
-  onFileChosen: (index: number, fileName: string | undefined) => void;
+  onFileChosen: (index: number, file: File | undefined) => void;
+  onFileRemoved: (index: number) => void;
+  stepNumber: number;
+  totalSteps: number;
 }) {
   return (
-    <div className="app-form-section">
-      <p className="app-form-step-sub">
-        File types allowed: JPG, JPEG, PNG, PDF &middot; Maximum file size: 1MB
-      </p>
-      <div className="app-form-doc-list">
-        {documents.map((doc, index) => (
-          <div className="app-form-doc-row" key={doc.name}>
-            <span className="app-form-doc-num">{index + 1}</span>
-            <span className="app-form-doc-name">
-              {doc.name}
-              {doc.required && <span className="app-form-req"> *</span>}
-            </span>
-            <label className="app-form-doc-drop">
-              <span aria-hidden="true">📎</span>{" "}
-              {doc.fileName ?? "Choose file to upload"}
-              <input
-                type="file"
-                className="app-form-doc-file-input"
-                onChange={(e) => onFileChosen(index, e.target.files?.[0]?.name)}
-              />
-            </label>
-            <span
-              className={`app-form-doc-status ${doc.fileName ? "app-form-doc-status--yes" : ""}`}
-            >
-              {doc.fileName ? "✓ Uploaded" : "Not uploaded"}
-            </span>
-          </div>
-        ))}
+    <div className="app-form-section app-form-section--docs">
+      <div className="app-form-doc-head">
+        <div className="app-form-doc-head-icon" aria-hidden="true">
+          <DocFileIcon />
+        </div>
+        <div className="app-form-doc-head-text">
+          <h2>Upload Documents</h2>
+          <p>Upload all the required documents. Ensure all files are clear and valid.</p>
+        </div>
+        <span className="app-form-doc-step-badge">
+          Step {stepNumber} of {totalSteps}
+        </span>
+      </div>
+
+      <div className="app-form-callout app-form-callout--docs">
+        <InfoIcon />
+        <span>
+          File types allowed: JPG, JPEG, PNG, PDF &nbsp;&bull;&nbsp; Maximum
+          file size: 1MB per file
+        </span>
+      </div>
+
+      <div className="app-form-doc-table">
+        <div className="app-form-doc-table-head" aria-hidden="true">
+          <span>Sr. No.</span>
+          <span>Document Name</span>
+          <span>Upload File</span>
+          <span>Status</span>
+        </div>
+        <div className="app-form-doc-list">
+          {documents.map((doc, index) => (
+            <div className="app-form-doc-row" key={doc.name}>
+              <span className="app-form-doc-num">{index + 1}</span>
+
+              <span className="app-form-doc-name-wrap">
+                <span className="app-form-doc-name">
+                  {doc.name}
+                  {doc.required && (
+                    <span className="app-form-required"> *</span>
+                  )}
+                </span>
+                {doc.required && (
+                  <span className="app-form-doc-required-tag">Required</span>
+                )}
+              </span>
+
+              {doc.fileName ? (
+                <div className="app-form-doc-file-card">
+                  <span className="app-form-doc-file-icon" aria-hidden="true">
+                    <PdfIcon />
+                  </span>
+                  <span className="app-form-doc-file-meta">
+                    <span className="app-form-doc-file-name">
+                      {doc.fileName}
+                    </span>
+                    <span className="app-form-doc-file-size">
+                      {doc.fileSize}
+                    </span>
+                  </span>
+                  <button
+                    type="button"
+                    className="app-form-doc-file-remove"
+                    aria-label={`Remove ${doc.fileName}`}
+                    onClick={() => onFileRemoved(index)}
+                  >
+                    <CloseIcon />
+                  </button>
+                </div>
+              ) : (
+                <label className="app-form-doc-drop">
+                  <span className="app-form-doc-drop-icon" aria-hidden="true">
+                    <UploadIcon />
+                  </span>
+                  <span className="app-form-doc-drop-text">
+                    <span className="app-form-doc-drop-title">
+                      Choose file to upload
+                    </span>
+                    <span className="app-form-doc-drop-hint">
+                      JPG, JPEG, PNG or PDF (Max. 1MB)
+                    </span>
+                  </span>
+                  <input
+                    type="file"
+                    className="app-form-doc-file-input"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    onChange={(e) =>
+                      onFileChosen(index, e.target.files?.[0])
+                    }
+                  />
+                </label>
+              )}
+
+              <span
+                className={`app-form-doc-status ${doc.fileName ? "app-form-doc-status--yes" : ""}`}
+              >
+                <span className="app-form-doc-status-icon" aria-hidden="true">
+                  {doc.fileName ? <StatusCheckIcon /> : <StatusDashIcon />}
+                </span>
+                <span className="app-form-doc-status-text">
+                  <span className="app-form-doc-status-label">
+                    {doc.fileName ? "Uploaded" : "Not uploaded"}
+                  </span>
+                  {doc.fileName && doc.uploadedAt && (
+                    <span className="app-form-doc-status-date">
+                      {doc.uploadedAt}
+                    </span>
+                  )}
+                </span>
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
+  );
+}
+
+function DocFileIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M7 2h7l5 5v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" strokeLinejoin="round" />
+      <path d="M14 2v5h5" strokeLinejoin="round" />
+      <path d="M8.5 12.5h7M8.5 16h7M8.5 9h3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PdfIcon() {
+  return (
+    <svg width="22" height="26" viewBox="0 0 24 28" fill="none">
+      <path
+        d="M3 2h12l6 6v18a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"
+        fill="var(--color-error)"
+      />
+      <path d="M15 2v6h6" fill="rgba(255,255,255,0.35)" />
+      <text
+        x="12"
+        y="19"
+        textAnchor="middle"
+        fontSize="8"
+        fontWeight="700"
+        fill="#ffffff"
+        fontFamily="var(--font-family-base, sans-serif)"
+      >
+        PDF
+      </text>
+    </svg>
+  );
+}
+
+function UploadIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M12 15V4M12 4 8 8M12 4l4 4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+      <path d="M5 5l14 14M19 5 5 19" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function StatusCheckIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M8 12.5l2.5 2.5L16 9.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function StatusDashIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M8 12h8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function LockIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <rect x="5" y="11" width="14" height="9" rx="2" strokeLinejoin="round" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function PersonIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M4.5 20a7.5 7.5 0 0 1 15 0" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PhoneIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path
+        d="M6 3h3l1.5 4L8.5 8.5a12 12 0 0 0 6 6l1.5-2L20 14v3a2 2 0 0 1-2 2A15 15 0 0 1 4 5a2 2 0 0 1 2-2Z"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function CategoryIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <rect x="3" y="3" width="8" height="8" rx="1.5" />
+      <rect x="13" y="3" width="8" height="8" rx="1.5" />
+      <rect x="3" y="13" width="8" height="8" rx="1.5" />
+      <rect x="13" y="13" width="8" height="8" rx="1.5" />
+    </svg>
+  );
+}
+
+function MarksIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M4 19V9M10 19V5M16 19v-7M20 19H4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function PaymentIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <rect x="2.5" y="5.5" width="19" height="13" rx="2" />
+      <path d="M2.5 10h19" />
+      <path d="M6 14.5h4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PrintIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M6 9V3h12v6" strokeLinejoin="round" />
+      <rect x="4" y="9" width="16" height="8" rx="1.5" />
+      <path d="M6 14h12v7H6z" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M12 3v12M7 10l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4 19h16" strokeLinecap="round" />
+    </svg>
   );
 }
 
@@ -1025,37 +1300,96 @@ function PaymentStep({
   );
 }
 
-function LockStep({
-  applicantName,
-  board,
-  category,
-  merit,
-  documentsUploaded,
-  locked,
-  paymentStatus,
-}: {
-  applicantName: string;
-  board: string;
-  category: string;
-  merit: string;
-  documentsUploaded: number;
-  locked: boolean;
-  paymentStatus: PaymentData["status"];
-}) {
-  return (
-    <div className="app-form-section">
-      <p className="app-form-step-sub">
-        Review every section below, then lock your application to submit it.
-      </p>
+const YES_NO_FLAG_LABELS: { key: keyof CategoryData; label: string }[] = [
+  { key: "handicapped", label: "Handicapped / Hearing Disability" },
+  {
+    key: "earthquakeOrProjectAffected",
+    label: "Earthquake / Project Affected",
+  },
+  { key: "parentTransferred", label: "Parent Transferred to Process Area" },
+  {
+    key: "grandparentsFreedomFighter",
+    label: "Grandparents Freedom Fighter",
+  },
+  {
+    key: "parentDefenceServiceman",
+    label: "Defence Serviceman / Ex-Serviceman",
+  },
+  { key: "sportsCategory", label: "Sports Category" },
+  { key: "orphanQuota", label: "Orphan Quota (1%)" },
+];
 
-      <div className="app-form-lock-hero">
+function LockStep({
+  registration,
+  personal,
+  category,
+  marks,
+  totalMarks,
+  totalOutOf,
+  meritOn500,
+  passingStatus,
+  passedEnglish,
+  passedScience,
+  documents,
+  payment,
+  locked,
+}: {
+  registration: RegistrationData;
+  personal: PersonalData;
+  category: CategoryData;
+  marks: SubjectMark[];
+  totalMarks: number;
+  totalOutOf: number;
+  meritOn500: string;
+  passingStatus: string;
+  passedEnglish: string;
+  passedScience: string;
+  documents: DocumentRow[];
+  payment: PaymentData;
+  locked: boolean;
+}) {
+  const applicationNo = "CDSC00002859";
+  const documentsUploaded = documents.filter((d) => d.fileName).length;
+  const activeFlags = YES_NO_FLAG_LABELS.filter(
+    (flag) => category[flag.key] === "Yes",
+  );
+
+  function handlePrint() {
+    window.print();
+  }
+
+  return (
+    <div className="app-form-section app-form-section--review">
+      <div className="app-form-review-toolbar">
+        <p className="app-form-step-sub app-form-review-toolbar-note">
+          Review every section below, then lock your application to submit
+          it.
+        </p>
+        <div className="app-form-review-toolbar-actions">
+          <Button variant="secondary" type="button" onClick={handlePrint}>
+            <PrintIcon /> Print
+          </Button>
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={handlePrint}
+            title="Choose 'Save as PDF' in the print dialog to download"
+          >
+            <DownloadIcon /> Download as PDF
+          </Button>
+        </div>
+      </div>
+
+      <div
+        className={`app-form-lock-hero ${locked ? "app-form-lock-hero--locked" : ""}`}
+      >
         <div className="app-form-lock-seal" aria-hidden="true">
-          🔒
+          <LockIcon />
         </div>
         <h2>
           {locked
-            ? "Application FYJC2026-00842 is locked"
-            : "Ready to lock Application FYJC2026-00842"}
+            ? `Application ${applicationNo} is locked`
+            : `Ready to lock Application ${applicationNo}`}
         </h2>
         <p>
           Once locked, Part-I details cannot be edited until the next round
@@ -1063,32 +1397,223 @@ function LockStep({
         </p>
       </div>
 
-      <h2 className="app-form-section-title">Applicant Summary</h2>
-      <div className="app-form-summary-grid">
-        <SummaryRow label="Full Name" value={applicantName} />
-        <SummaryRow label="Board" value={board} />
-        <SummaryRow label="Category" value={category} />
-        <SummaryRow label="Merit Marks" value={`${merit} / 500`} />
-        <SummaryRow
-          label="Documents Uploaded"
-          value={`${documentsUploaded} of 4`}
-        />
-        <SummaryRow
-          label="Fee Status"
-          value={
-            paymentStatus === "success"
-              ? `Paid — ₹${PAYMENT_AMOUNT}`
-              : "Not Paid"
-          }
-          success={paymentStatus === "success"}
-        />
-      </div>
+      <ReviewSection title="Applicant Details" icon={<PersonIcon />}>
+        <div className="app-form-summary-grid">
+          <SummaryRow label="Full Name" value={personal.fullName} />
+          <SummaryRow label="Gender" value={personal.gender} />
+          <SummaryRow label="Board" value={registration.board} />
+          <SummaryRow label="Seat Number" value={registration.seatNumber} />
+          <SummaryRow
+            label="Month &amp; Year of Examination"
+            value={`${registration.month} ${registration.year}`}
+          />
+          <SummaryRow label="Applicant Status" value={registration.status} />
+          <SummaryRow label="10th School Name" value={personal.schoolName} />
+          <SummaryRow label="10th School UDISE Number" value={personal.udise} />
+          <SummaryRow
+            label="10th School Index Number"
+            value={personal.indexNumber || "—"}
+          />
+          <SummaryRow label="School Area" value={registration.schoolArea} />
+        </div>
+      </ReviewSection>
 
-      <div className="app-form-callout">
+      <ReviewSection title="Contact Details" icon={<PhoneIcon />}>
+        <div className="app-form-summary-grid">
+          <SummaryRow
+            label="Correspondence Address"
+            value={personal.address}
+          />
+          <SummaryRow label="City" value={personal.city} />
+          <SummaryRow label="District" value={personal.district} />
+          <SummaryRow label="Taluka / Area" value={personal.area} />
+          <SummaryRow label="State" value={personal.state} />
+          <SummaryRow label="PIN Code" value={personal.pin} />
+          <SummaryRow label="Mobile Number" value={personal.mobile1} />
+          <SummaryRow
+            label="Alternate Mobile"
+            value={personal.mobile2 || "—"}
+          />
+          <SummaryRow label="Landline" value={personal.landline || "—"} />
+          <SummaryRow label="E-Mail ID" value={personal.email || "—"} />
+        </div>
+      </ReviewSection>
+
+      <ReviewSection title="Category &amp; Reservation" icon={<CategoryIcon />}>
+        <div className="app-form-summary-grid">
+          <SummaryRow
+            label="Original Category"
+            value={category.originalCategory}
+          />
+          <SummaryRow
+            label="Category for Admission"
+            value={category.admissionCategory}
+          />
+          <SummaryRow label="Minority Quota" value={category.minority} />
+          <SummaryRow
+            label="Inhouse Quota"
+            value={
+              category.inhouse === "Yes, apply through Inhouse Quota"
+                ? "Yes"
+                : "No"
+            }
+          />
+          {category.minority === "Belongs to Minority Category" && (
+            <>
+              <SummaryRow
+                label="Linguistic Minority"
+                value={category.linguisticMinority || "—"}
+              />
+              <SummaryRow
+                label="Religious Minority"
+                value={category.religiousMinority || "—"}
+              />
+            </>
+          )}
+        </div>
+
+        <p className="app-form-review-subhead">Special Reservation Claims</p>
+        {activeFlags.length > 0 ? (
+          <div className="app-form-review-tags">
+            {activeFlags.map((flag) => (
+              <span className="app-form-review-tag" key={flag.key}>
+                <StepCheckIcon /> {flag.label}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <p className="app-form-review-empty">
+            No special reservation claimed.
+          </p>
+        )}
+      </ReviewSection>
+
+      <ReviewSection title="Qualification" icon={<MarksIcon />}>
+        <div className="app-form-summary-grid">
+          <SummaryRow label="Passing Status" value={passingStatus} />
+          <SummaryRow
+            label="Passed in English Subject"
+            value={passedEnglish}
+          />
+          <SummaryRow
+            label="Passed in Science Subject"
+            value={passedScience}
+          />
+          <SummaryRow
+            label="Merit Marks"
+            value={`${meritOn500} / 500`}
+            success
+          />
+        </div>
+
+        <div className="app-form-table-wrap app-form-review-table-wrap">
+          <table className="app-form-table">
+            <thead>
+              <tr>
+                <th>Language / Subject</th>
+                <th>Subject Name</th>
+                <th>Marks</th>
+                <th>Out Of</th>
+              </tr>
+            </thead>
+            <tbody>
+              {marks.map((row) => (
+                <tr key={row.subject}>
+                  <td>{row.subject}</td>
+                  <td>{row.name}</td>
+                  <td>{row.marks}</td>
+                  <td>{row.outOf}</td>
+                </tr>
+              ))}
+              <tr className="app-form-review-total-row">
+                <td colSpan={2}>Total</td>
+                <td>{totalMarks}</td>
+                <td>{totalOutOf}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ReviewSection>
+
+      <ReviewSection title="Documents" icon={<DocFileIcon />}>
+        <div className="app-form-review-doc-list">
+          {documents.map((doc, index) => (
+            <div className="app-form-review-doc-row" key={doc.name}>
+              <span className="app-form-doc-num">{index + 1}</span>
+              <span className="app-form-review-doc-name">{doc.name}</span>
+              <span
+                className={`app-form-doc-status ${doc.fileName ? "app-form-doc-status--yes" : ""}`}
+              >
+                <span className="app-form-doc-status-icon" aria-hidden="true">
+                  {doc.fileName ? <StatusCheckIcon /> : <StatusDashIcon />}
+                </span>
+                <span className="app-form-doc-status-text">
+                  <span className="app-form-doc-status-label">
+                    {doc.fileName ? doc.fileName : "Not uploaded"}
+                  </span>
+                  {doc.fileName && doc.uploadedAt && (
+                    <span className="app-form-doc-status-date">
+                      {doc.uploadedAt}
+                    </span>
+                  )}
+                </span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </ReviewSection>
+
+      <ReviewSection title="Admission Fee" icon={<PaymentIcon />}>
+        <div className="app-form-summary-grid">
+          <SummaryRow
+            label="Amount"
+            value={`₹${PAYMENT_AMOUNT}`}
+          />
+          <SummaryRow
+            label="Status"
+            value={payment.status === "success" ? "Paid" : "Not Paid"}
+            success={payment.status === "success"}
+          />
+          <SummaryRow label="Payment Mode" value={payment.mode || "—"} />
+          <SummaryRow label="Payment Date" value={payment.date || "—"} />
+          <SummaryRow
+            label="Transaction Reference Number"
+            value={payment.transactionRef || "—"}
+          />
+        </div>
+      </ReviewSection>
+
+      <div className="app-form-callout app-form-callout--declaration">
         <InfoIcon />
-        <span>Locking is final for this admission round.</span>
+        <span>
+          I hereby declare that the information provided above is true to the
+          best of my knowledge. Locking is final for this admission round —
+          Part-I details cannot be edited until the next round begins.
+        </span>
       </div>
     </div>
+  );
+}
+
+function ReviewSection({
+  title,
+  icon,
+  children,
+}: {
+  title: string;
+  icon: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <section className="app-form-review-section">
+      <h2 className="app-form-review-section-title">
+        <span className="app-form-review-section-icon" aria-hidden="true">
+          {icon}
+        </span>
+        {title}
+      </h2>
+      {children}
+    </section>
   );
 }
 

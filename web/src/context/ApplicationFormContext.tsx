@@ -59,6 +59,8 @@ export interface DocumentRow {
   name: string;
   required: boolean;
   fileName: string | null;
+  fileSize: string | null;
+  uploadedAt: string | null;
 }
 
 export interface PaymentData {
@@ -128,17 +130,29 @@ const DEFAULT_DOCUMENTS: DocumentRow[] = [
     name: "10th Standard Marksheet (Non-SSC board marksheet is mandatory)",
     required: true,
     fileName: "marksheet.pdf",
+    fileSize: "245 KB",
+    uploadedAt: "12 Aug 2026, 04:15 PM",
   },
-  { name: "School Leaving Certificate", required: false, fileName: null },
+  {
+    name: "School Leaving Certificate",
+    required: true,
+    fileName: null,
+    fileSize: null,
+    uploadedAt: null,
+  },
   {
     name: "Undertaking of Student for Documents Submission",
-    required: false,
+    required: true,
     fileName: null,
+    fileSize: null,
+    uploadedAt: null,
   },
   {
     name: "Self Declaration of Student for Minority Quota",
-    required: false,
+    required: true,
     fileName: null,
+    fileSize: null,
+    uploadedAt: null,
   },
 ];
 

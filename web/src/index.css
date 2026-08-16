@@ -42,3 +42,36 @@ a {
 button {
   font-family: inherit;
 }
+
+@media print {
+  .app-sidebar,
+  .app-form-stepper-wrap,
+  .app-form-footer,
+  .app-form-locked-note,
+  .app-form-review-toolbar,
+  .ux4g-toast {
+    display: none !important;
+  }
+
+  .app-shell,
+  .app-body,
+  .app-main,
+  .app-form-page,
+  .app-form-shell,
+  .app-form-card {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #fff !important;
+  }
+
+  .app-form-review-section {
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+}
