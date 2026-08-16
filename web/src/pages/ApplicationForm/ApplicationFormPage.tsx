@@ -20,11 +20,10 @@ import "./ApplicationFormPage.css";
 
 const STEPS = APPLICATION_STEPS;
 
-// Shorter labels for the stepper tabs so all 7 steps fit on one line;
+// Shorter labels for the stepper tabs so all steps fit on one line;
 // the full descriptive name still shows as the step's heading.
 const STEP_TAB_LABELS = [
-  "Registration",
-  "Personal & Address",
+  "Details",
   "Category & Reservation",
   "Qualification",
   "Documents",
@@ -152,6 +151,59 @@ export function ApplicationFormPage() {
     );
   }
 
+  const footerContent = (
+    <div className="app-form-footer">
+      <Button
+        variant="secondary"
+        onClick={handlePrev}
+        disabled={current === 0}
+      >
+        &larr; Previous
+      </Button>
+      <div className="app-form-footer-right">
+        {current === STEPS.length - 1 ? (
+          <Button onClick={handleLock} disabled={locked}>
+            {locked ? "Application Locked" : "Lock Application Form"}
+          </Button>
+        ) : current === 4 && payment.status === "success" ? (
+          <>
+            <Button
+              variant="secondary"
+              type="button"
+              onClick={() => window.print()}
+            >
+              Print Receipt
+            </Button>
+            <Button
+              variant="secondary"
+              type="button"
+              onClick={() => window.print()}
+            >
+              Download Receipt
+            </Button>
+            <Button onClick={handleNext}>Next &rarr;</Button>
+          </>
+        ) : (
+          <>
+            <Button
+              variant="secondary"
+              type="button"
+              onClick={handleSaveDraft}
+            >
+              Save Draft
+            </Button>
+            <Button
+              onClick={handleNext}
+              disabled={current === 4 && payment.status !== "success"}
+            >
+              Next &rarr;
+            </Button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <div className="app-form-page">
       <div className="app-form-stepper-wrap">
@@ -210,126 +262,95 @@ export function ApplicationFormPage() {
       </div>
 
       <div className="app-form-shell">
-        <div className="app-form-card">
-          {current !== 4 && (
-            <div className="app-form-card-head">
-              <h1>{STEPS[current]}</h1>
-              <span className="app-form-step-count">
-                STEP {String(current + 1).padStart(2, "0")} / {STEPS.length}
-              </span>
-            </div>
-          )}
-
-          {current === 0 && (
-            <RegistrationStep data={registration} onChange={setRegistration} />
-          )}
-          {current === 1 && (
-            <PersonalStep data={personal} onChange={setPersonal} />
-          )}
-          {current === 2 && (
-            <CategoryStep data={category} onChange={setCategory} />
-          )}
-          {current === 3 && (
-            <QualificationStep
-              passingStatus={passingStatus}
-              setPassingStatus={setPassingStatus}
-              passedEnglish={passedEnglish}
-              setPassedEnglish={setPassedEnglish}
-              passedScience={passedScience}
-              setPassedScience={setPassedScience}
-              marks={marks}
-              updateMark={updateMark}
-              totalMarks={totalMarks}
-              totalOutOf={totalOutOf}
-              meritOn500={meritOn500}
-            />
-          )}
-          {current === 4 && (
-            <DocumentsStep
-              documents={documents}
-              onFileChosen={handleFileChosen}
-              onFileRemoved={handleFileRemoved}
-              stepNumber={current + 1}
-              totalSteps={STEPS.length}
-            />
-          )}
-          {current === 5 && (
-            <PaymentStep
-              payment={payment}
-              registration={registration}
-              personal={personal}
-              onPayNow={() => navigate("/payment-gateway")}
-            />
-          )}
-          {current === 6 && (
-            <LockStep
-              registration={registration}
-              personal={personal}
-              category={category}
-              marks={marks}
-              totalMarks={totalMarks}
-              totalOutOf={totalOutOf}
-              meritOn500={meritOn500}
-              passingStatus={passingStatus}
-              passedEnglish={passedEnglish}
-              passedScience={passedScience}
-              documents={documents}
-              payment={payment}
-              locked={locked}
-            />
-          )}
-
-          <div className="app-form-footer">
-            <Button
-              variant="secondary"
-              onClick={handlePrev}
-              disabled={current === 0}
+        {current === 0 ? (
+          <div className="app-form-numbered-stack">
+            <NumberedFormCard
+              number={1}
+              title="Registration Details"
+              description="Enter the applicant's 10th standard board details to begin the admission process."
             >
-              &larr; Previous
-            </Button>
-            <div className="app-form-footer-right">
-              {current === STEPS.length - 1 ? (
-                <Button onClick={handleLock} disabled={locked}>
-                  {locked ? "Application Locked" : "Lock Application Form"}
-                </Button>
-              ) : current === 5 && payment.status === "success" ? (
-                <>
-                  <Button
-                    variant="secondary"
-                    type="button"
-                    onClick={() => window.print()}
-                  >
-                    Print Receipt
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    type="button"
-                    onClick={() => window.print()}
-                  >
-                    Download Receipt
-                  </Button>
-                  <Button onClick={handleNext}>Next &rarr;</Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    variant="secondary"
-                    type="button"
-                    onClick={handleSaveDraft}
-                  >
-                    Save Draft
-                  </Button>
-                  <Button
-                    onClick={handleNext}
-                    disabled={current === 5 && payment.status !== "success"}
-                  >
-                    Next &rarr;
-                  </Button>
-                </>
-              )}
+              <RegistrationStep data={registration} onChange={setRegistration} />
+            </NumberedFormCard>
+
+            <NumberedFormCard
+              number={2}
+              title="Personal & Address Details"
+              description="Confirm the applicant's identity, school information, and contact details."
+            >
+              <PersonalStep data={personal} onChange={setPersonal} />
+            </NumberedFormCard>
+
+            <div className="app-form-card app-form-footer-card">
+              {footerContent}
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="app-form-card">
+            {current !== 3 && (
+              <div className="app-form-card-head">
+                <h1>{STEPS[current]}</h1>
+                <span className="app-form-step-count">
+                  STEP {String(current + 1).padStart(2, "0")} / {STEPS.length}
+                </span>
+              </div>
+            )}
+
+            {current === 1 && (
+              <CategoryStep data={category} onChange={setCategory} />
+            )}
+            {current === 2 && (
+              <QualificationStep
+                passingStatus={passingStatus}
+                setPassingStatus={setPassingStatus}
+                passedEnglish={passedEnglish}
+                setPassedEnglish={setPassedEnglish}
+                passedScience={passedScience}
+                setPassedScience={setPassedScience}
+                marks={marks}
+                updateMark={updateMark}
+                totalMarks={totalMarks}
+                totalOutOf={totalOutOf}
+                meritOn500={meritOn500}
+              />
+            )}
+            {current === 3 && (
+              <DocumentsStep
+                documents={documents}
+                onFileChosen={handleFileChosen}
+                onFileRemoved={handleFileRemoved}
+                stepNumber={current + 1}
+                totalSteps={STEPS.length}
+              />
+            )}
+            {current === 4 && (
+              <PaymentStep
+                payment={payment}
+                registration={registration}
+                personal={personal}
+                onPayNow={() => navigate("/payment-gateway")}
+              />
+            )}
+            {current === 5 && (
+              <LockStep
+                registration={registration}
+                personal={personal}
+                category={category}
+                marks={marks}
+                totalMarks={totalMarks}
+                totalOutOf={totalOutOf}
+                meritOn500={meritOn500}
+                passingStatus={passingStatus}
+                passedEnglish={passedEnglish}
+                passedScience={passedScience}
+                documents={documents}
+                payment={payment}
+                locked={locked}
+              />
+            )}
+
+            {footerContent}
+          </div>
+        )}
 
         {locked && (
           <div className="app-form-locked-note">
@@ -347,6 +368,30 @@ export function ApplicationFormPage() {
       </div>
 
       <Toast message="Application saved successfully" visible={toastVisible} />
+    </div>
+  );
+}
+
+function NumberedFormCard({
+  number,
+  title,
+  description,
+  children,
+}: {
+  number: number;
+  title: string;
+  description: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="app-form-card app-form-numbered-card">
+      <div className="app-form-numbered-head">
+        <h2 className="app-form-numbered-title">
+          {number}. {title}
+        </h2>
+        <p className="app-form-numbered-desc">{description}</p>
+      </div>
+      {children}
     </div>
   );
 }
@@ -723,7 +768,7 @@ function CategoryStep({
         <YesNoField
           letter="G"
           name="orphanQuota"
-          label="If you are falling under category of orphan as per the provisions in GR dated 2nd April 2018, would you like to apply for 1% quota in the admission process?"
+          label="If you are falling under category of orphan as per the provisions in GR dated 2nd April 2018, would you like to apply for 1% quota?"
           value={data.orphanQuota}
           onChange={(v) => onChange({ ...data, orphanQuota: v })}
         />

@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useApplicationForm } from "../../context/ApplicationFormContext";
 import { useCapOption, MAX_PREFERENCES } from "../../context/CapOptionContext";
 import { useQuota } from "../../context/QuotaContext";
+import { AiAssistant } from "../assistant/AiAssistant";
 import "./AppShell.css";
 
 interface LeafNavItem {
@@ -72,6 +73,12 @@ const NAV_ITEMS: NavItem[] = [
       { key: "cap-admission-status", label: "CAP Allotment Status", to: "/cap-admission/status" },
       { key: "cap-admission-summary", label: "CAP Admission Summary", to: "/cap-admission/summary" },
     ],
+  },
+  {
+    key: "whatsapp",
+    label: "WhatsApp",
+    to: "/whatsapp",
+    icon: <WhatsAppIcon />,
   },
 ];
 
@@ -242,6 +249,8 @@ export function AppShell() {
           <Outlet />
         </main>
       </div>
+
+      <AiAssistant />
     </div>
   );
 }
@@ -302,6 +311,14 @@ function AdmissionIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M4 12l5 5L20 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.81L2 22l5.42-1.35a9.9 9.9 0 0 0 4.62 1.14h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.79 14.02c-.24.68-1.4 1.31-1.93 1.36-.51.06-1 .27-3.38-.7-2.86-1.16-4.68-4.05-4.82-4.24-.14-.19-1.15-1.53-1.15-2.92 0-1.39.72-2.07.98-2.35.26-.28.56-.35.75-.35.19 0 .37 0 .53.01.17.01.4-.06.62.48.24.58.81 1.99.88 2.13.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.75 1.24 1.6 2.01 1.11 1 2.04 1.31 2.33 1.46.29.15.46.13.63-.08.17-.2.72-.84.91-1.13.19-.29.38-.24.63-.14.26.1 1.65.78 1.94.92.29.15.48.22.55.34.07.13.07.72-.17 1.41Z" />
     </svg>
   );
 }

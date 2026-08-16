@@ -16,6 +16,7 @@ import { GrievancePage } from "./pages/Miscellaneous/GrievancePage";
 import { WithdrawApplicationPage } from "./pages/Miscellaneous/WithdrawApplicationPage";
 import { CapAllotmentStatusPage } from "./pages/CapAdmission/CapAllotmentStatusPage";
 import { CapAdmissionSummaryPage } from "./pages/CapAdmission/CapAdmissionSummaryPage";
+import { WhatsAppPrototypePage } from "./pages/WhatsApp/WhatsAppPrototypePage";
 import { PaymentGatewayPage } from "./pages/PaymentGateway/PaymentGatewayPage";
 import { ApplicationFormProvider } from "./context/ApplicationFormContext";
 import { CapOptionProvider } from "./context/CapOptionContext";
@@ -67,6 +68,7 @@ function App() {
                 path="/cap-admission/summary"
                 element={<CapAdmissionSummaryPage />}
               />
+              <Route path="/whatsapp" element={<WhatsAppPrototypePage />} />
             </Route>
           </Routes>
         </QuotaProvider>

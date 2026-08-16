@@ -118,11 +118,11 @@ const DEFAULT_CATEGORY: CategoryData = {
 };
 
 const DEFAULT_MARKS: SubjectMark[] = [
-  { subject: "Subject 1", name: "Maths", marks: "100", outOf: "100" },
-  { subject: "Subject 2", name: "Science", marks: "90", outOf: "100" },
+  { subject: "Subject 1", name: "Maths", marks: "90", outOf: "100" },
+  { subject: "Subject 2", name: "Science", marks: "85", outOf: "100" },
   { subject: "Subject 3", name: "History", marks: "80", outOf: "100" },
-  { subject: "Subject 4", name: "English", marks: "100", outOf: "100" },
-  { subject: "Subject 5", name: "Marathi", marks: "100", outOf: "100" },
+  { subject: "Subject 4", name: "English", marks: "82", outOf: "100" },
+  { subject: "Subject 5", name: "Marathi", marks: "70", outOf: "100" },
 ];
 
 const DEFAULT_DOCUMENTS: DocumentRow[] = [
