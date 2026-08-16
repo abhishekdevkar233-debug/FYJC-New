@@ -1,0 +1,39 @@
+.cap-allotment-title {
+  margin-top: 0;
+}
+
+.cap-allotment-hint {
+  margin: 0 0 var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-error);
+  font-weight: var(--font-weight-medium);
+}
+
+.cap-allotment-check-btn {
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+.cap-allotment-result {
+  margin-top: var(--space-5);
+  max-width: 480px;
+}
+
+.cap-admission-summary-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.cap-admission-summary-header strong {
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 640px) {
+  .cap-allotment-check-btn {
+    width: 100%;
+  }
+}

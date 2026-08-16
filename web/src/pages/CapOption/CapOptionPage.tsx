@@ -19,6 +19,7 @@ import "./CapOptionPage.css";
 
 const STEPS = ["Choose Stream & Medium", "Rank Your Preferences", "Review & Lock"];
 const STATUS_OPTIONS = ["Self Financed", "Aided", "Government"];
+const RESULTS_PER_PAGE = 9;
 const CART_SECTION_ID = "cap-selected-colleges-cart";
 const PREFERENCES_SECTION_ID = "cap-set-preferences-section";
 
@@ -332,6 +333,7 @@ function SearchAndRankStep({
   const [district, setDistrict] = useState("All Districts");
   const [status, setStatus] = useState("All Types");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+  const [page, setPage] = useState(1);
   const [detailsCollege, setDetailsCollege] = useState<JuniorCollege | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -361,6 +363,18 @@ function SearchAndRankStep({
       return true;
     });
   }, [stream, medium, district, status, search]);
+
+  const totalPages = Math.max(1, Math.ceil(results.length / RESULTS_PER_PAGE));
+  const currentPage = Math.min(page, totalPages);
+  const pagedResults = results.slice(
+    (currentPage - 1) * RESULTS_PER_PAGE,
+    currentPage * RESULTS_PER_PAGE,
+  );
+
+  // Reset back to page 1 whenever the search/filters/view change the result set.
+  useEffect(() => {
+    setPage(1);
+  }, [stream, medium, district, status, search, viewMode]);
 
   // Auto-reveal & scroll to the preference-ordering section the moment the 10th college is added.
   useEffect(() => {
@@ -502,7 +516,9 @@ function SearchAndRankStep({
       {/* Section 3: Available Colleges results */}
       <div className="cap-available-section">
         <div className="cap-available-header">
-          <h2 className="app-form-section-title cap-available-title">Available Colleges</h2>
+          <h2 className="app-form-section-title cap-available-title">
+            Select Jr. Colleges of Your Choice
+          </h2>
           <div className="cap-available-header-right">
             <span className="cap-available-count">{results.length} colleges found</span>
             <div className="cap-view-toggle" role="group" aria-label="Change results layout">
@@ -540,7 +556,7 @@ function SearchAndRankStep({
 
         {results.length > 0 && viewMode === "cards" && (
           <div className="cap-college-grid">
-            {results.map((college) => {
+            {pagedResults.map((college) => {
               const isSelected = selectedIds.has(college.id);
               const disableAdd = !isSelected && atLimit;
               return (
@@ -585,49 +601,53 @@ function SearchAndRankStep({
             <table className="cap-table cap-available-table">
               <thead>
                 <tr>
+                  <th>Sr. No.</th>
+                  <th>Choice Code</th>
                   <th>College Name</th>
-                  <th>Code</th>
                   <th>District</th>
-                  <th>Type</th>
-                  <th>Fees</th>
+                  <th>Block / Taluka</th>
+                  <th>Stream</th>
+                  <th>Medium</th>
                   <th className="cap-table-actions-col">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {results.map((college) => {
+                {pagedResults.map((college, index) => {
                   const isSelected = selectedIds.has(college.id);
                   const disableAdd = !isSelected && atLimit;
                   return (
                     <tr key={college.id}>
+                      <td>{(currentPage - 1) * RESULTS_PER_PAGE + index + 1}</td>
+                      <td className="cap-table-mono">{college.choiceCode}</td>
                       <td>
                         <p className="cap-table-college-name">{college.name}</p>
-                        <p className="cap-table-college-address">{college.address}</p>
                       </td>
-                      <td className="cap-table-mono">{college.choiceCode}</td>
                       <td>{college.district}</td>
-                      <td>{college.status}</td>
-                      <td>
-                        {college.fees > 0
-                          ? `₹${college.fees.toLocaleString("en-IN")}`
-                          : "No Fees"}
-                      </td>
+                      <td>{college.taluka}</td>
+                      <td>{college.stream}</td>
+                      <td>{college.medium}</td>
                       <td>
                         <div className="cap-table-row-actions">
-                          <Button
-                            variant="secondary"
-                            className="cap-college-view-btn"
+                          <button
+                            type="button"
+                            className="cap-table-action-link"
                             onClick={() => setDetailsCollege(college)}
                           >
-                            View
-                          </Button>
-                          <Button
-                            variant={isSelected ? "secondary" : "primary"}
-                            className="cap-college-add-btn"
+                            <EyeIcon /> Details
+                          </button>
+                          <button
+                            type="button"
+                            className={`cap-table-action-add ${isSelected ? "cap-table-action-add--done" : ""}`}
                             disabled={isSelected || disableAdd}
+                            aria-label={
+                              isSelected
+                                ? `${college.name} added to preferences`
+                                : `Add ${college.name} to preferences`
+                            }
                             onClick={() => addCollege(college)}
                           >
-                            {isSelected ? "Added ✓" : disableAdd ? "Limit Reached" : "Add"}
-                          </Button>
+                            {isSelected ? <CheckIcon /> : <PlusIcon />}
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -635,6 +655,37 @@ function SearchAndRankStep({
                 })}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {results.length > RESULTS_PER_PAGE && (
+          <div className="cap-pagination">
+            <span className="cap-pagination-summary">
+              Showing {(currentPage - 1) * RESULTS_PER_PAGE + 1}
+              &ndash;{Math.min(currentPage * RESULTS_PER_PAGE, results.length)} of{" "}
+              {results.length} colleges
+            </span>
+            <div className="cap-pagination-controls">
+              <button
+                type="button"
+                className="cap-pagination-btn"
+                disabled={currentPage === 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              >
+                Previous
+              </button>
+              <span className="cap-pagination-page">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                type="button"
+                className="cap-pagination-btn"
+                disabled={currentPage === totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -646,22 +697,6 @@ function SearchAndRankStep({
           <p className="app-form-step-sub">
             Arrange your colleges from most preferred to least preferred.
           </p>
-          <div className="cap-priority-explainer">
-            <span className="cap-priority-explainer-item">
-              <span className="cap-priority-explainer-badge">1</span>
-              First Choice
-            </span>
-            <ArrowRightIcon />
-            <span className="cap-priority-explainer-item">
-              <span className="cap-priority-explainer-badge cap-priority-explainer-badge--muted">
-                {MAX_PREFERENCES}
-              </span>
-              Last Choice
-            </span>
-            <span className="cap-priority-explainer-hint">
-              <ArrowUpIcon /> Move a college up = higher preference
-            </span>
-          </div>
           <ol className="cap-rank-list cap-rank-list--scroll">
             {preferences.map((college, index) => (
               <li
@@ -1077,18 +1112,27 @@ function CloseIcon() {
   );
 }
 
-function ArrowRightIcon() {
+function EyeIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="12" r="3" />
     </svg>
   );
 }
 
-function ArrowUpIcon() {
+function PlusIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-      <path d="M12 19V5M6 11l6-6 6 6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+      <path d="M4 12l5 5L20 6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

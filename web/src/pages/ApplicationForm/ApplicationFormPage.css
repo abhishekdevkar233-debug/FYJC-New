@@ -195,6 +195,23 @@
   background-color: var(--color-border);
 }
 
+/* Boxed subsections, e.g. within Personal & Address Details */
+.app-form-subsection {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-bottom: var(--space-4);
+  background-color: var(--color-surface);
+}
+
+.app-form-subsection .app-form-section-title {
+  margin-top: 0;
+}
+
+.app-form-subsection .app-form-callout {
+  margin-bottom: 0;
+}
+
 /* Choice grid */
 .app-form-choice-grid {
   display: grid;

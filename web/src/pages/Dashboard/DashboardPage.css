@@ -16,7 +16,7 @@
 
 .dashboard-greeting h1 {
   margin: 0 0 var(--space-1);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
 }

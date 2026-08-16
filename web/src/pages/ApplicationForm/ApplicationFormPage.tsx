@@ -474,155 +474,164 @@ function PersonalStep({
 
   return (
     <div className="app-form-section">
-      <h2 className="app-form-section-title">Applicant Identity</h2>
-      <div className="app-form-field-grid">
-        <TextField
-          className="ux4g-field--tight"
-          label="Full Name"
-          required
-          value={data.fullName}
-          onChange={(e) => set("fullName", e.target.value)}
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="Mother's Name"
-          required
-          value={data.motherName}
-          onChange={(e) => set("motherName", e.target.value)}
-        />
-        <SelectField
-          className="ux4g-field--tight"
-          label="Gender"
-          required
-          options={["Male", "Female", "Other"]}
-          value={data.gender}
-          onChange={(e) => set("gender", e.target.value)}
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="Date of Birth"
-          required
-          value={data.dob}
-          onChange={(e) => set("dob", e.target.value)}
-        />
+      <div className="app-form-subsection">
+        <h2 className="app-form-section-title">Applicant Identity</h2>
+        <div className="app-form-field-grid">
+          <TextField
+            className="ux4g-field--tight"
+            label="Full Name"
+            required
+            value={data.fullName}
+            onChange={(e) => set("fullName", e.target.value)}
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="Mother's Name"
+            required
+            value={data.motherName}
+            onChange={(e) => set("motherName", e.target.value)}
+          />
+          <SelectField
+            className="ux4g-field--tight"
+            label="Gender"
+            required
+            options={["Male", "Female", "Other"]}
+            value={data.gender}
+            onChange={(e) => set("gender", e.target.value)}
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="Date of Birth"
+            required
+            value={data.dob}
+            onChange={(e) => set("dob", e.target.value)}
+          />
+        </div>
       </div>
 
-      <h2 className="app-form-section-title">10th School Information</h2>
-      <div className="app-form-field-grid">
-        <TextField
-          className="ux4g-field--tight"
-          label="10th School Name"
-          required
-          value={data.schoolName}
-          onChange={(e) => set("schoolName", e.target.value)}
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="10th School UDISE Number"
-          required
-          value={data.udise}
-          onChange={(e) => set("udise", e.target.value)}
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="10th School Index Number"
-          value={data.indexNumber}
-          onChange={(e) => set("indexNumber", e.target.value)}
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="Residence"
-          required
-          value={data.residence}
-          onChange={(e) => set("residence", e.target.value)}
-        />
+      <div className="app-form-subsection">
+        <h2 className="app-form-section-title">10th School Information</h2>
+        <div className="app-form-field-grid">
+          <TextField
+            className="ux4g-field--tight"
+            label="10th School Name"
+            required
+            value={data.schoolName}
+            onChange={(e) => set("schoolName", e.target.value)}
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="10th School UDISE Number"
+            required
+            value={data.udise}
+            onChange={(e) => set("udise", e.target.value)}
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="10th School Index Number"
+            value={data.indexNumber}
+            onChange={(e) => set("indexNumber", e.target.value)}
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="Residence"
+            required
+            value={data.residence}
+            onChange={(e) => set("residence", e.target.value)}
+          />
+        </div>
       </div>
 
-      <h2 className="app-form-section-title">Address for Correspondence</h2>
-      <div className="app-form-field-grid app-form-field-grid--cols-3">
-        <TextField
-          className="ux4g-field--tight"
-          label="Address"
-          required
-          value={data.address}
-          onChange={(e) => set("address", e.target.value)}
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="Pin Code"
-          required
-          value={data.pin}
-          onChange={(e) => set("pin", e.target.value)}
-        />
-        <SelectField
-          className="ux4g-field--tight"
-          label="State"
-          required
-          options={["Maharashtra"]}
-          value={data.state}
-          onChange={(e) => set("state", e.target.value)}
-        />
-      </div>
-      <div className="app-form-field-grid app-form-field-grid--cols-3">
-        <SelectField
-          className="ux4g-field--tight"
-          label="District"
-          required
-          options={["AHILYANAGAR", "PUNE", "THANE"]}
-          value={data.district}
-          onChange={(e) => set("district", e.target.value)}
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="Area / Block / Tehsil / Taluka"
-          required
-          value={data.area}
-          onChange={(e) => set("area", e.target.value)}
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="City / Town / Village"
-          required
-          value={data.city}
-          onChange={(e) => set("city", e.target.value)}
-        />
-      </div>
-
-      <h2 className="app-form-section-title">Contact Details</h2>
-      <div className="app-form-field-grid app-form-field-grid--cols-4">
-        <TextField
-          className="ux4g-field--tight"
-          label="Mobile Number 1"
-          required
-          value={data.mobile1}
-          onChange={(e) => set("mobile1", e.target.value)}
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="Mobile Number 2"
-          value={data.mobile2}
-          onChange={(e) => set("mobile2", e.target.value)}
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="Landline Phone Number"
-          value={data.landline}
-          onChange={(e) => set("landline", e.target.value)}
-        />
-        <TextField
-          className="ux4g-field--tight"
-          label="E-Mail ID"
-          value={data.email}
-          onChange={(e) => set("email", e.target.value)}
-        />
+      <div className="app-form-subsection">
+        <h2 className="app-form-section-title">Address for Correspondence</h2>
+        <div className="app-form-field-grid app-form-field-grid--cols-3">
+          <TextField
+            className="ux4g-field--tight"
+            label="Address"
+            required
+            value={data.address}
+            onChange={(e) => set("address", e.target.value)}
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="Pin Code"
+            required
+            value={data.pin}
+            onChange={(e) => set("pin", e.target.value)}
+          />
+          <SelectField
+            className="ux4g-field--tight"
+            label="State"
+            required
+            options={["Maharashtra"]}
+            value={data.state}
+            onChange={(e) => set("state", e.target.value)}
+          />
+        </div>
+        <div className="app-form-field-grid app-form-field-grid--cols-3">
+          <SelectField
+            className="ux4g-field--tight"
+            label="District"
+            required
+            options={["AHILYANAGAR", "PUNE", "THANE"]}
+            value={data.district}
+            onChange={(e) => set("district", e.target.value)}
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="Area / Block / Tehsil / Taluka"
+            required
+            value={data.area}
+            onChange={(e) => set("area", e.target.value)}
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="City / Town / Village"
+            required
+            value={data.city}
+            onChange={(e) => set("city", e.target.value)}
+          />
+        </div>
       </div>
 
-      <div className="app-form-callout">
-        <InfoIcon />
-        <span>
-          If the applicant has no mobile number or e-mail, use a parent's or
-          relative's details so admission updates reach someone reliably.
-        </span>
+      <div className="app-form-subsection">
+        <h2 className="app-form-section-title">Contact Details</h2>
+        <div className="app-form-field-grid app-form-field-grid--cols-4">
+          <TextField
+            className="ux4g-field--tight"
+            label="Mobile Number 1"
+            required
+            value={data.mobile1}
+            onChange={(e) => set("mobile1", e.target.value)}
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="Mobile Number 2"
+            value={data.mobile2}
+            onChange={(e) => set("mobile2", e.target.value)}
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="Landline Phone Number"
+            value={data.landline}
+            onChange={(e) => set("landline", e.target.value)}
+          />
+          <TextField
+            className="ux4g-field--tight"
+            label="E-Mail ID"
+            value={data.email}
+            onChange={(e) => set("email", e.target.value)}
+          />
+        </div>
+
+        <div className="app-form-callout">
+          <InfoIcon />
+          <span>
+            If the applicant has no mobile number or e-mail, use a parent's
+            or relative's details so admission updates reach someone
+            reliably.
+          </span>
+        </div>
       </div>
     </div>
   );

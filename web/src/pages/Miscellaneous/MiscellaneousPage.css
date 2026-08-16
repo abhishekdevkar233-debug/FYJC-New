@@ -1,0 +1,250 @@
+/* Generic data table used by Payment History & Grievance */
+.misc-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.misc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.misc-table thead th {
+  background-color: var(--color-surface-alt);
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.misc-table tbody td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+  color: var(--color-text-primary);
+}
+
+.misc-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.misc-table-mono {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--ux4g-primary);
+}
+
+.misc-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.misc-tag--success {
+  background-color: rgba(var(--color-success-rgb), 0.12);
+  color: var(--color-success);
+}
+
+.misc-tag--pending {
+  background-color: rgba(var(--ux4g-primary-rgb), 0.1);
+  color: var(--ux4g-primary);
+}
+
+.misc-tag--failed {
+  background-color: rgba(var(--color-error-rgb), 0.1);
+  color: var(--color-error);
+}
+
+.misc-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.misc-icon-btn:hover {
+  background-color: var(--color-surface-alt);
+  color: var(--ux4g-primary);
+  border-color: var(--ux4g-primary);
+}
+
+.misc-empty-note {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+/* Grievance list header */
+.grievance-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.grievance-toolbar h1 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.grievance-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.grievance-search {
+  max-width: 320px;
+  flex: 1 1 220px;
+}
+
+/* Grievance modal form */
+.grievance-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+@media (max-width: 620px) {
+  .grievance-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Withdraw Application preview */
+.withdraw-banner {
+  background-color: var(--ux4g-primary);
+  color: var(--color-text-on-primary);
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-6);
+}
+
+.withdraw-section {
+  margin-bottom: var(--space-6);
+}
+
+.withdraw-section-title {
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.withdraw-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.withdraw-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+}
+
+.withdraw-grid > .withdraw-row:nth-child(1),
+.withdraw-grid > .withdraw-row:nth-child(2) {
+  border-top: none;
+}
+
+.withdraw-key {
+  color: var(--color-text-secondary);
+}
+
+.withdraw-value {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  text-align: right;
+}
+
+.withdraw-merit-value {
+  margin-top: var(--space-3);
+}
+
+.withdraw-empty {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.withdraw-status-verified {
+  color: var(--color-success);
+}
+
+.withdraw-action {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.withdraw-action-btn {
+  min-width: 240px;
+}
+
+.withdraw-footer-note {
+  margin: 0;
+  text-align: center;
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.withdraw-copyright {
+  margin: var(--space-4) 0 0;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+@media (max-width: 760px) {
+  .withdraw-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .withdraw-grid > .withdraw-row:nth-child(2) {
+    border-top: 1px solid var(--color-border);
+  }
+}
