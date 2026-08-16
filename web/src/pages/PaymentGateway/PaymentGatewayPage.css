@@ -9,7 +9,7 @@
 
 .pay-gateway-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 600px;
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -53,9 +53,18 @@
 
 .pay-gateway-amount {
   text-align: center;
-  padding: var(--space-6) 0;
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-6) 0 0;
   margin-bottom: var(--space-6);
+}
+
+.pay-gateway-amount--panel {
+  padding: var(--space-4) 0 0;
+  margin: 0;
+  border-top: 1px dashed var(--color-border-strong);
+}
+
+.pay-gateway-amount--panel .pay-gateway-amount-value {
+  font-size: var(--font-size-xl);
 }
 
 .pay-gateway-amount-label {
@@ -81,7 +90,7 @@
 }
 
 .pay-gateway-method-label {
-  margin: 0 0 var(--space-2);
+  margin: 0 0 var(--space-3);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
@@ -89,35 +98,203 @@
   letter-spacing: 0.04em;
 }
 
-.pay-gateway-method-option {
+/* Accordion methods */
+.pay-gateway-methods {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.pay-gateway-method-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-surface);
+}
+
+.pay-gateway-method-item--open {
+  border-color: var(--ux4g-primary);
+}
+
+.pay-gateway-method-header {
+  width: 100%;
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  border: 1.5px solid var(--ux4g-primary);
-  background-color: var(--color-surface-alt);
-  border-radius: var(--radius-md);
   padding: var(--space-3) var(--space-4);
-  margin-bottom: var(--space-6);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.pay-gateway-method-icon {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: color-mix(in srgb, var(--ux4g-primary) 10%, var(--color-surface));
+  color: var(--ux4g-primary);
+}
+
+.pay-gateway-method-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pay-gateway-method-title {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
 
-.pay-gateway-method-radio {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 1.5px solid var(--ux4g-primary);
-  position: relative;
-  flex-shrink: 0;
+.pay-gateway-method-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
 }
 
-.pay-gateway-method-option--selected .pay-gateway-method-radio::after {
-  content: "";
-  position: absolute;
-  inset: 3px;
+.pay-gateway-method-chevron {
+  flex-shrink: 0;
+  color: var(--ux4g-primary);
+  display: flex;
+  transition: transform 0.15s ease;
+}
+
+.pay-gateway-method-item--open .pay-gateway-method-chevron {
+  transform: rotate(90deg);
+}
+
+.pay-gateway-method-panel {
+  padding: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface-alt);
+  animation: pay-gateway-panel-in 0.15s ease;
+}
+
+@keyframes pay-gateway-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* QR panel */
+.pay-gateway-qr-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+}
+
+.pay-gateway-qr-code {
+  padding: var(--space-3);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  line-height: 0;
+}
+
+.pay-gateway-qr-code svg {
+  width: 152px;
+  height: 152px;
+}
+
+.pay-gateway-qr-hint {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  max-width: 260px;
+}
+
+.pay-gateway-qr-waiting {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--ux4g-primary);
+}
+
+.pay-gateway-qr-dot {
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background-color: var(--ux4g-primary);
+  animation: pay-gateway-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes pay-gateway-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Card panel */
+.pay-gateway-card-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.pay-gateway-card-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.pay-gateway-field {
+  margin: 0;
+}
+
+/* UPI panel */
+.pay-gateway-upi-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.pay-gateway-upi-hint {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Security note */
+.pay-gateway-secure-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  margin-bottom: var(--space-5);
+}
+
+.pay-gateway-secure-note svg {
+  flex-shrink: 0;
+  color: var(--ux4g-primary);
+  margin-top: 1px;
 }
 
 .pay-gateway-pay-btn {

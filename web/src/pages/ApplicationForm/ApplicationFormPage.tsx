@@ -256,6 +256,8 @@ export function ApplicationFormPage() {
           {current === 5 && (
             <PaymentStep
               payment={payment}
+              registration={registration}
+              personal={personal}
               onPayNow={() => navigate("/payment-gateway")}
             />
           )}
@@ -290,6 +292,24 @@ export function ApplicationFormPage() {
                 <Button onClick={handleLock} disabled={locked}>
                   {locked ? "Application Locked" : "Lock Application Form"}
                 </Button>
+              ) : current === 5 && payment.status === "success" ? (
+                <>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={() => window.print()}
+                  >
+                    Print Receipt
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={() => window.print()}
+                  >
+                    Download Receipt
+                  </Button>
+                  <Button onClick={handleNext}>Next &rarr;</Button>
+                </>
               ) : (
                 <>
                   <Button
@@ -299,7 +319,12 @@ export function ApplicationFormPage() {
                   >
                     Save Draft
                   </Button>
-                  <Button onClick={handleNext}>Next &rarr;</Button>
+                  <Button
+                    onClick={handleNext}
+                    disabled={current === 5 && payment.status !== "success"}
+                  >
+                    Next &rarr;
+                  </Button>
                 </>
               )}
             </div>
@@ -1200,58 +1225,59 @@ function DownloadIcon() {
 
 function PaymentStep({
   payment,
+  registration,
+  personal,
   onPayNow,
 }: {
   payment: PaymentData;
+  registration: RegistrationData;
+  personal: PersonalData;
   onPayNow: () => void;
 }) {
+  const applicationNo = "CDSC00002859";
+
   if (payment.status === "success") {
     return (
-      <div className="app-form-section">
-        <p className="app-form-step-sub">
-          A one-time admission processing fee confirms your Part-I application.
-        </p>
+      <div className="app-form-section app-form-section--receipt">
+        <ReviewSection
+          title="Applicant's Personal Information"
+          icon={<PersonIcon />}
+        >
+          <div className="app-form-receipt-banner">
+            Application Form No: {applicationNo}
+          </div>
 
-        <div className="app-form-pay-summary">
-          <div className="app-form-pay-cell">
-            <p className="app-form-pay-key">Amount</p>
-            <p className="app-form-pay-value app-form-pay-value--big">
-              &#8377;{PAYMENT_AMOUNT}
-            </p>
+          <div className="app-form-summary-grid">
+            <SummaryRow label="Name of the Applicant" value={personal.fullName} />
+            <SummaryRow label="Seat Number" value={registration.seatNumber} />
+            <SummaryRow
+              label="Month &amp; Year of Examination"
+              value={`${registration.month} ${registration.year}`}
+            />
+            <SummaryRow label="Board" value={registration.board} />
           </div>
-          <div className="app-form-pay-cell">
-            <p className="app-form-pay-key">Status</p>
-            <p className="app-form-pay-value app-form-pay-value--success">
-              SUCCESS
-            </p>
-          </div>
-          <div className="app-form-pay-cell">
-            <p className="app-form-pay-key">Payment Mode</p>
-            <p className="app-form-pay-value">{payment.mode}</p>
-          </div>
-          <div className="app-form-pay-cell">
-            <p className="app-form-pay-key">Payment Date</p>
-            <p className="app-form-pay-value app-form-pay-value--small">
-              {payment.date}
-            </p>
-          </div>
-        </div>
 
-        <h2 className="app-form-section-title">Transaction Details</h2>
-        <div className="app-form-field-grid">
-          <TextField
-            className="ux4g-field--tight"
-            label="Transaction Reference Number"
-            value={payment.transactionRef ?? ""}
-            disabled
-          />
-          <TextField
-            className="ux4g-field--tight"
-            label="Payment Done By"
-            value="FYJC2026-00842"
-            disabled
-          />
-        </div>
+          <div className="app-form-receipt-success">
+            <StatusCheckIcon />
+            <span>Your Registration Fee is Paid</span>
+          </div>
+        </ReviewSection>
+
+        <ReviewSection title="Payment Details" icon={<PaymentIcon />}>
+          <div className="app-form-summary-grid">
+            <SummaryRow
+              label="Amount Paid"
+              value={`₹${PAYMENT_AMOUNT}`}
+              success
+            />
+            <SummaryRow label="Payment Mode" value={payment.mode || "—"} />
+            <SummaryRow label="Payment Date" value={payment.date || "—"} />
+            <SummaryRow
+              label="Transaction Reference Number"
+              value={payment.transactionRef || "—"}
+            />
+          </div>
+        </ReviewSection>
 
         <div className="app-form-callout">
           <InfoIcon />
