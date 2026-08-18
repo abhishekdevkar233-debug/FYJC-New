@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
-import { speak, SPEECH_LOCALE } from "../lib/speech";
+import { speakBest, SPEECH_LOCALE } from "../lib/speech";
 import { PAYMENT_RESULT_VOICEOVER } from "../lib/applicationDraft";
 import { useLanguage } from "./LanguageContext";
 
@@ -222,7 +222,6 @@ export function ApplicationFormProvider({ children }: { children: ReactNode }) {
         mode: "UPI",
         date: new Date().toLocaleString("en-IN"),
       });
-      speak(PAYMENT_RESULT_VOICEOVER.success[voiceoverLangKey], voiceoverLocale);
     } else {
       setPayment({
         status: "failed",
@@ -230,7 +229,7 @@ export function ApplicationFormProvider({ children }: { children: ReactNode }) {
         mode: null,
         date: null,
       });
-      speak(PAYMENT_RESULT_VOICEOVER.failed[voiceoverLangKey], voiceoverLocale);
+      void speakBest(PAYMENT_RESULT_VOICEOVER.failed[voiceoverLangKey], voiceoverLocale);
     }
   }
 

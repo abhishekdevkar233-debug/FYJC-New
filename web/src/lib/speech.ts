@@ -1,3 +1,5 @@
+import { speakCloud } from "./cloudSpeech";
+
 const INDIAN_FEMALE_NAME_PATTERN =
   /heera|veena|raveena|priya|neerja|swara|google (हिन्दी|hindi|us english)|indian/i;
 const GENERIC_FEMALE_NAME_PATTERN =
@@ -98,4 +100,19 @@ export function speak(text: string, localeCode: string = SPEECH_LOCALE.EN) {
       { once: true },
     );
   }
+}
+
+/**
+ * Speaks `text`, preferring realistic cloud neural speech for Marathi (via
+ * the server/ TTS proxy) and falling back to the browser's built-in voice
+ * if the proxy isn't running, isn't configured, or the request fails.
+ * English/Hindi always use the browser voice (already acceptable, no extra
+ * cost).
+ */
+export async function speakBest(text: string, localeCode: string = SPEECH_LOCALE.EN) {
+  if (localeCode === SPEECH_LOCALE.MR) {
+    const played = await speakCloud(text, localeCode);
+    if (played) return;
+  }
+  speak(text, localeCode);
 }

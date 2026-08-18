@@ -3,12 +3,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
+  justify-content: center;
   padding: var(--space-8) var(--space-4);
   background-color: var(--color-bg);
 }
 
 .wa-phone {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -21,14 +22,61 @@
   background-color: #efe8df;
 }
 
+.wa-empty-hint {
+  margin: auto;
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: #8696a0;
+}
+
+/* Status bar (decorative device chrome) */
+.wa-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px var(--space-4) 4px;
+  background-color: #075e54;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  flex-shrink: 0;
+}
+
+.wa-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+}
+
 /* Header */
 .wa-header {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
   background-color: #075e54;
   color: #ffffff;
+  flex-shrink: 0;
+}
+
+.wa-header-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: none;
+  color: #ffffff;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.wa-header-avatar-wrap {
+  position: relative;
   flex-shrink: 0;
 }
 
@@ -39,9 +87,23 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.15);
-  font-size: 18px;
+  background-color: #ffffff;
+  font-size: 16px;
   flex-shrink: 0;
+}
+
+.wa-header-avatar-badge {
+  position: absolute;
+  bottom: -3px;
+  right: -6px;
+  padding: 1px 4px;
+  border-radius: var(--radius-pill);
+  background-color: #ffffff;
+  color: #075e54;
+  font-size: 7px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 0 1.5px #075e54;
 }
 
 .wa-header-text {
@@ -52,6 +114,9 @@
 }
 
 .wa-header-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
@@ -64,15 +129,56 @@
   color: rgba(255, 255, 255, 0.75);
 }
 
-.wa-header-badge {
+.wa-header-menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: none;
+  color: #ffffff;
+  cursor: pointer;
   flex-shrink: 0;
-  padding: 2px var(--space-2);
-  border-radius: var(--radius-pill);
-  background-color: rgba(255, 255, 255, 0.18);
-  font-size: 10px;
-  font-weight: var(--font-weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  padding: 0;
+}
+
+/* Business account notice + date divider */
+.wa-meta-notice {
+  align-self: center;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  max-width: 90%;
+  margin: 0 auto var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: #d8f0f3;
+  color: #3a4a4d;
+  font-size: 11.5px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.wa-meta-notice svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #4a8a90;
+}
+
+.wa-date-divider {
+  align-self: center;
+  margin: 0 auto var(--space-1);
+}
+
+.wa-date-divider span {
+  display: inline-block;
+  padding: 4px var(--space-3);
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.75);
+  color: #667781;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
 }
 
 /* Chat area */
@@ -100,6 +206,7 @@
 .wa-bubble {
   position: relative;
   max-width: 80%;
+  min-width: 72px;
   padding: var(--space-2) var(--space-3) var(--space-4);
   border-radius: 10px;
   font-size: var(--font-size-sm);
@@ -128,8 +235,16 @@
   position: absolute;
   right: var(--space-3);
   bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
   font-size: 10px;
+  white-space: nowrap;
   color: rgba(17, 27, 33, 0.45);
+}
+
+.wa-ticks {
+  color: #53bdeb;
 }
 
 .wa-bubble--typing {
@@ -168,17 +283,152 @@
   }
 }
 
+.wa-bubble--paying {
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+}
+
+.wa-pay-processing-text {
+  font-size: var(--font-size-xs);
+  color: #111b21;
+  margin-left: 4px;
+}
+
+/* In-chat UPI payment card */
+.wa-pay-card {
+  align-self: flex-start;
+  max-width: 85%;
+  margin-top: var(--space-2);
+  padding: var(--space-3);
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  background-color: #ffffff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.wa-pay-card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.wa-pay-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: rgba(37, 211, 102, 0.14);
+  color: #128c4a;
+  flex-shrink: 0;
+}
+
+.wa-pay-card-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.wa-pay-card-title {
+  font-size: var(--font-size-xs);
+  color: #54656f;
+}
+
+.wa-pay-card-amount {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: #111b21;
+}
+
+.wa-pay-btn {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  border: none;
+  background-color: #25d366;
+  color: #ffffff;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.wa-pay-btn:hover {
+  background-color: #1fb959;
+}
+
+.wa-pay-cancel {
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-pill);
+  border: none;
+  background: none;
+  color: #54656f;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.wa-pay-cancel:hover {
+  text-decoration: underline;
+}
+
+/* Login CTA — bot bubble card + a separate, real WhatsApp-style link button */
+.wa-login-cta-card {
+  max-width: 80%;
+  padding: var(--space-3) var(--space-3) var(--space-4);
+  border-radius: 10px;
+  border-top-left-radius: 2px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.wa-login-cta-title {
+  margin: 0 0 4px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: #111b21;
+}
+
+.wa-login-cta-desc {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #3b4a54;
+}
+
+.wa-login-cta-link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: 8px;
+  border: none;
+  background-color: #ffffff;
+  color: #027eb5;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.wa-login-cta-link:hover {
+  background-color: #f0f6f8;
+}
+
 /* Quick-reply menu */
 .wa-menu {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 6px;
   margin-top: var(--space-2);
 }
 
 .wa-menu-btn {
-  align-self: flex-start;
-  max-width: 90%;
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-pill);
   border: 1px solid #075e54;
@@ -187,7 +437,7 @@
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
-  text-align: left;
+  white-space: nowrap;
 }
 
 .wa-menu-btn:hover {
@@ -205,13 +455,33 @@
   flex-shrink: 0;
 }
 
+.wa-input-pill {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  background-color: #ffffff;
+}
+
+.wa-input-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #8696a0;
+  flex-shrink: 0;
+}
+
 .wa-input {
   flex: 1;
+  min-width: 0;
   min-height: 40px;
-  padding: 0 var(--space-4);
-  border-radius: var(--radius-pill);
+  padding: 0;
   border: none;
-  background-color: #ffffff;
+  background-color: transparent;
   font-size: var(--font-size-sm);
   color: #111b21;
   outline: none;
@@ -239,16 +509,474 @@
   background-color: #064c44;
 }
 
-.wa-disclaimer {
-  max-width: 420px;
-  margin: 0;
-  text-align: center;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-}
-
 @media (max-width: 480px) {
   .wa-phone {
     height: calc(100vh - 160px);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Simulated FYJC Portal login — slides in over the chat inside the same
+   phone frame, matching the existing portal's Sign In screen, and slides
+   back out to return to the same conversation.
+   --------------------------------------------------------------------- */
+.wa-login-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  transform: translateX(100%);
+  transition: transform 0.32s ease;
+}
+
+.wa-login-screen--open {
+  transform: translateX(0);
+}
+
+.wa-login-topbar {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.wa-login-topbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wa-login-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--color-surface-alt);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.wa-login-back:hover {
+  background-color: var(--color-border);
+}
+
+.wa-login-en-pill {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface-alt);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+}
+
+.wa-login-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.wa-login-brand-logo {
+  height: 26px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.wa-login-brand-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1.3;
+}
+
+.wa-login-brand-sub {
+  margin: 0;
+  font-size: 10.5px;
+  color: var(--color-text-secondary);
+}
+
+.wa-login-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-5) var(--space-4);
+}
+
+.wa-login-heading {
+  margin: 0 0 4px;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.wa-login-subheading {
+  margin: 0 0 var(--space-4);
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+}
+
+.wa-login-field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
+  margin-bottom: 6px;
+}
+
+.wa-login-field-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.wa-login-field-icon {
+  position: absolute;
+  left: var(--space-3);
+  display: inline-flex;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.wa-login-input {
+  width: 100%;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px var(--space-3) 10px 34px;
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  outline: none;
+}
+
+.wa-login-input:focus {
+  border-color: var(--ux4g-primary);
+}
+
+.wa-login-input--password {
+  padding-right: 36px;
+}
+
+.wa-login-eye {
+  position: absolute;
+  right: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0;
+}
+
+.wa-login-row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+  flex-wrap: wrap;
+}
+
+.wa-login-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.wa-login-checkbox input {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--ux4g-primary);
+}
+
+.wa-login-link {
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  color: var(--ux4g-primary);
+  text-decoration: underline;
+}
+
+.wa-login-error {
+  margin: var(--space-2) 0 0;
+  font-size: 11.5px;
+  color: var(--color-error);
+}
+
+/* The shared CaptchaField only stacks its code/input below 480px
+   *viewport* width, but this login screen lives inside a ~420px
+   container regardless of the actual browser width — force the
+   stacked layout here so the code never gets squeezed against its
+   refresh icon. */
+.wa-login-body .ux4g-captcha-row {
+  grid-template-columns: 1fr;
+}
+
+.wa-login-body .ux4g-captcha-code {
+  gap: var(--space-3);
+  padding-inline: var(--space-3);
+  font-size: var(--font-size-base);
+  letter-spacing: 0.2em;
+  min-height: 40px;
+}
+
+.wa-login-footer {
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.wa-login-submit {
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 12px var(--space-4);
+  background-color: var(--ux4g-primary);
+  color: var(--color-text-on-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+
+.wa-login-submit:hover:not(:disabled) {
+  background-color: var(--ux4g-primary-hover);
+}
+
+.wa-login-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.wa-login-cancel {
+  display: block;
+  width: 100%;
+  margin-top: var(--space-2);
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.wa-login-footnote {
+  margin: var(--space-3) 0 0;
+  text-align: center;
+  font-size: 10.5px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------
+   Simulated BillDesk-style checkout — slides in over the chat, same
+   mechanic as the sign-in screen. In production this step would hand off
+   to BillDesk's hosted/embedded checkout instead of this in-app form.
+   --------------------------------------------------------------------- */
+.wa-checkout-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 21;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  transform: translateX(100%);
+  transition: transform 0.32s ease;
+}
+
+.wa-checkout-screen--open {
+  transform: translateX(0);
+}
+
+.wa-checkout-topbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface-alt);
+}
+
+.wa-checkout-topbar-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.wa-checkout-topbar-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.wa-checkout-topbar-sub {
+  font-size: 10.5px;
+  color: var(--color-text-muted);
+}
+
+.wa-checkout-topbar svg {
+  color: var(--color-success);
+  flex-shrink: 0;
+}
+
+.wa-checkout-amount {
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background-color: rgba(var(--ux4g-primary-rgb), 0.06);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.wa-checkout-amount-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.wa-checkout-amount-value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--ux4g-primary);
+}
+
+.wa-checkout-tabs {
+  flex-shrink: 0;
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.wa-checkout-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: var(--space-3) var(--space-2);
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.wa-checkout-tab--active {
+  color: var(--ux4g-primary);
+  border-bottom-color: var(--ux4g-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.wa-checkout-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+}
+
+.wa-checkout-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.wa-checkout-input--no-icon {
+  padding-left: var(--space-3) !important;
+}
+
+.wa-checkout-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.wa-checkout-select {
+  width: 100%;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px var(--space-3);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  outline: none;
+  margin-bottom: var(--space-2);
+}
+
+.wa-checkout-select:focus {
+  border-color: var(--ux4g-primary);
+}
+
+.wa-checkout-hint {
+  margin: var(--space-1) 0 0;
+  font-size: 11.5px;
+  color: var(--color-text-muted);
+}
+
+.wa-checkout-footer {
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.wa-checkout-footnote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: var(--space-2) 0 0;
+  text-align: center;
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+.wa-checkout-processing {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+}
+
+.wa-checkout-processing p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.wa-checkout-processing-note {
+  font-size: 11.5px !important;
+  color: var(--color-text-muted) !important;
+}
+
+.wa-checkout-spinner {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid rgba(var(--ux4g-primary-rgb), 0.2);
+  border-top-color: var(--ux4g-primary);
+  animation: wa-checkout-spin 0.8s linear infinite;
+  margin-bottom: var(--space-2);
+}
+
+@keyframes wa-checkout-spin {
+  to {
+    transform: rotate(360deg);
   }
 }

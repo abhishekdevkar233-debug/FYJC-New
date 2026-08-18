@@ -32,6 +32,7 @@ function App() {
             <Routes>
               <Route path="/" element={<LoginPage />} />
               <Route path="/payment-gateway" element={<PaymentGatewayPage />} />
+              <Route path="/whatsapp" element={<WhatsAppPrototypePage />} />
               <Route element={<AppShell />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route
@@ -70,7 +71,6 @@ function App() {
                   path="/cap-admission/summary"
                   element={<CapAdmissionSummaryPage />}
                 />
-                <Route path="/whatsapp" element={<WhatsAppPrototypePage />} />
               </Route>
             </Routes>
           </QuotaProvider>
