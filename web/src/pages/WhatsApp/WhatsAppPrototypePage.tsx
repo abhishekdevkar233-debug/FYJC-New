@@ -445,7 +445,7 @@ export function WhatsAppPrototypePage() {
           </button>
           <div className="wa-header-avatar-wrap">
             <span className="wa-header-avatar" aria-hidden="true">
-              🎓
+              <img src={logo2} alt="" className="wa-header-avatar-img" />
             </span>
             <span className="wa-header-avatar-badge">FYJC</span>
           </div>
