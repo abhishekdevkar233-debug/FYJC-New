@@ -1,0 +1,184 @@
+/*
+  Style 02 — Modern Minimal
+  A second, independently-selectable visual theme for the portal. Scoped
+  entirely under [data-portal-style="style2"] so Style 01 (the existing
+  design) is completely untouched. This is a token-driven re-skin — same
+  pages, same components, same functionality — plus a handful of targeted
+  overrides for the highest-impact shared chrome (header, sidebar, cards,
+  buttons, form fields, stepper) so the change reads as a distinct design
+  system rather than just a palette swap.
+
+  !important is used deliberately throughout this file: it is a theme-skin
+  layer that must always win over the base component CSS it is overriding,
+  regardless of import/HMR ordering.
+*/
+
+:root[data-portal-style="style2"] {
+  /* Palette: government purple -> a cooler, flatter modern blue */
+  --ux4g-primary: #2563eb;
+  --ux4g-primary-hover: #1d4ed8;
+  --ux4g-primary-dark: #1e40af;
+  --ux4g-primary-rgb: 37, 99, 235;
+
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-alt: #eef2f7;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+
+  --font-family-base: "Manrope", "Segoe UI", system-ui, sans-serif;
+
+  /* Softer, larger radius scale for a rounder, friendlier feel */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  /* Flatter, more diffuse shadows instead of hard drop-shadows */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 6px 16px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 24px 48px rgba(15, 23, 42, 0.12);
+}
+
+[data-portal-style="style2"] body,
+[data-portal-style="style2"].app-shell,
+[data-portal-style="style2"] .app-shell {
+  background: var(--color-bg) !important;
+}
+
+/* ---------------- Header ---------------- */
+[data-portal-style="style2"] .brand-topnav {
+  border-bottom: 1px solid transparent !important;
+  box-shadow: 0 2px 0 var(--ux4g-primary), var(--shadow-sm) !important;
+}
+
+[data-portal-style="style2"] .brand-topnav-title {
+  font-weight: var(--font-weight-bold) !important;
+  letter-spacing: -0.01em;
+}
+
+/* ---------------- Sidebar navigation ---------------- */
+[data-portal-style="style2"] .app-sidebar {
+  position: relative;
+  border-right: none !important;
+  box-shadow: 1px 0 0 var(--color-border) !important;
+  background-color: var(--color-surface) !important;
+}
+
+[data-portal-style="style2"] .app-sidebar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--ux4g-primary);
+}
+
+[data-portal-style="style2"] .app-sidebar-link {
+  border-radius: var(--radius-pill) !important;
+}
+
+[data-portal-style="style2"] .app-sidebar-link--active {
+  background: rgba(37, 99, 235, 0.1) !important;
+  color: #2563eb !important;
+}
+
+[data-portal-style="style2"] .app-sidebar-link--active:hover {
+  background: rgba(37, 99, 235, 0.16) !important;
+  color: #2563eb !important;
+}
+
+[data-portal-style="style2"] .app-sidebar-link--parent.app-sidebar-link--active {
+  background: rgba(37, 99, 235, 0.1) !important;
+}
+
+[data-portal-style="style2"] .app-sidebar-link--active .app-sidebar-badge {
+  background-color: rgba(37, 99, 235, 0.18) !important;
+  color: #2563eb !important;
+}
+
+[data-portal-style="style2"] .app-sidebar-sublink {
+  border-radius: var(--radius-pill) !important;
+}
+
+[data-portal-style="style2"] .app-sidebar-sublink--active {
+  background: rgba(37, 99, 235, 0.1) !important;
+  color: #2563eb !important;
+}
+
+[data-portal-style="style2"] .app-sidebar-logout {
+  border-radius: var(--radius-pill) !important;
+}
+
+/* ---------------- Buttons ---------------- */
+[data-portal-style="style2"] .ux4g-btn {
+  border-radius: var(--radius-pill) !important;
+  font-weight: var(--font-weight-bold) !important;
+  letter-spacing: -0.005em;
+}
+
+[data-portal-style="style2"] .ux4g-btn-primary {
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.3) !important;
+}
+
+[data-portal-style="style2"] .ux4g-btn-secondary {
+  border-width: 1.5px !important;
+}
+
+/* ---------------- Cards / shells (Application Form, CAP Option, etc.) ---------------- */
+[data-portal-style="style2"] .app-form-card,
+[data-portal-style="style2"] .app-form-numbered-card,
+[data-portal-style="style2"] .cap-search-panel,
+[data-portal-style="style2"] .cap-available-section,
+[data-portal-style="style2"] .cap-preferences-section,
+[data-portal-style="style2"] .cap-summary-item {
+  border-color: transparent !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+[data-portal-style="style2"] .app-form-stepper-wrap {
+  border-bottom: none !important;
+  box-shadow: 0 1px 0 var(--color-border) !important;
+}
+
+/* ---------------- Stepper ---------------- */
+[data-portal-style="style2"] .app-form-step-badge {
+  border-radius: var(--radius-md) !important;
+}
+
+[data-portal-style="style2"] .app-form-step-trigger--current {
+  background-color: transparent !important;
+}
+
+/* ---------------- Form fields ---------------- */
+[data-portal-style="style2"] .ux4g-field-control {
+  border-color: transparent !important;
+  background-color: var(--color-surface-alt) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+[data-portal-style="style2"] .ux4g-field-control:focus-within {
+  border-color: var(--ux4g-primary) !important;
+  background-color: var(--color-surface) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+[data-portal-style="style2"] .ux4g-field-label {
+  letter-spacing: 0.02em;
+  font-weight: var(--font-weight-bold) !important;
+}
+
+/* ---------------- Choice cards ---------------- */
+[data-portal-style="style2"] .choice-card {
+  border-radius: var(--radius-lg) !important;
+}
+
+[data-portal-style="style2"] .choice-card--selected {
+  border-color: var(--ux4g-primary) !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15) !important;
+}

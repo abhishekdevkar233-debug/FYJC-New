@@ -5,6 +5,8 @@ import logo2 from "../../assets/logo-2.svg";
 import logoDivider from "../../assets/logo-divider.svg";
 import { useLanguage } from "../../context/LanguageContext";
 import type { AppLanguage } from "../../context/LanguageContext";
+import { usePortalStyle, PORTAL_STYLE_OPTIONS } from "../../context/PortalStyleContext";
+import type { PortalStyle } from "../../context/PortalStyleContext";
 import "./BrandHeader.css";
 
 const LANGUAGES: AppLanguage[] = ["EN", "HI", "MR"];
@@ -14,6 +16,7 @@ const SCALE_STEP = 12.5;
 
 export function BrandHeader({ children }: { children?: ReactNode }) {
   const { language, setLanguage } = useLanguage();
+  const { portalStyle, setPortalStyle } = usePortalStyle();
   const [scale, setScale] = useState(100);
   const [highContrast, setHighContrast] = useState(false);
 
@@ -59,6 +62,21 @@ export function BrandHeader({ children }: { children?: ReactNode }) {
       </div>
 
       <div className="brand-topnav-toolbar">
+        <label className="brand-portal-style" aria-label="Portal Style">
+          <span className="brand-portal-style-label">Portal Style</span>
+          <select
+            className="brand-portal-style-select"
+            value={portalStyle}
+            onChange={(e) => setPortalStyle(e.target.value as PortalStyle)}
+          >
+            {PORTAL_STYLE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
         <div className="brand-a11y" role="group" aria-label="Accessibility settings">
           <div
             className="brand-a11y-font"

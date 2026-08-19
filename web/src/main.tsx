@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './styles/tokens.css'
 import './index.css'
+import './styles/portal-style-2.css'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
